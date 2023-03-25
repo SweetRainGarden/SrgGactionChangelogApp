@@ -1,7 +1,7 @@
 name: 'Srg auto collect changelog'
 description: 'Auto collect changelog'
 inputs:
-  who-to-greet:  # id of input
+  who-to-greet:  # id of input ddd
     description: 'Who to greet'
     required: true
     default: 'World'
