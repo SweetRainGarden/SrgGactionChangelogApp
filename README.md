@@ -1,1 +1,1 @@
-# SrgGactionChangelogApp
+# WyzeActionChangelogAndroid
