@@ -26,9 +26,20 @@ runs:
       shell: bash
     - run: echo "dump test"
       shell: bash
-    
+
     - run: pwd
       shell: bash
+
+    - run: |
+        echo "${{ github.event.pull_request.title }}"
+
+        if [[ "${{github.event.pull_request.merged}}" == true && "${{github.event.action}}" == closed ]]; then
+          echo "PR merged, clean the project first"
+        elif [[ "${{github.event.pull_request.merged}}" == false && "${{github.event.action}}" == closed ]]; then
+          echo "----------------------------> PR closed without merging, do nothing. <----------------------------"
+        else
+          echo "PR_CLOSE_AND_MERGED=false"
+        fi
     
     - run: goodbye.sh
       shell: bash
