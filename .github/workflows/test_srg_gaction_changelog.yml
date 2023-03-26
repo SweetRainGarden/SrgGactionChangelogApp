@@ -10,5 +10,5 @@ jobs:
         uses: SweetRainGarden/SrgGactionChangelogApp@develop
         with:
           jira-domain: 'xxx.atlassian.net'
-      - run: echo random-number ${{ steps.foo.outputs.random-number }}
+      - run: echo random-number ${{ steps.foo.outputs.jira_ticket_list }}
         shell: bash
