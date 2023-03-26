@@ -4,10 +4,10 @@ inputs:
   jira-domain:  # id of input ddd
     description: 'The company Jira domain'
     required: true
-    default: 'World'
+    default: 'srgxxxx.atlassian.net'
 outputs:
   jira_ticket_list:
-    description: "Random number"
+    description: "The jira tickets list form pull request and commit message"
     value: ${{ steps.extract_jira_tickets.outputs.jira_ticket_list }}
 runs:
   using: "composite"
@@ -16,9 +16,8 @@ runs:
       shell: bash
     - id: extract_jira_tickets
       run: |
-
         echo "jira_ticket_list=$(echo abc-$RANDOM)" >> $GITHUB_OUTPUT
-        echo "jira_ticket_list=$(echo abc-$RANDOM)" >> $GITHUB_OUTPUT
+        echo " hello extract_jira_tickets step"
 
       shell: bash
     - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
