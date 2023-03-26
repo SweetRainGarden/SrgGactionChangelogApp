@@ -40,6 +40,7 @@ runs:
         else
           echo "PR_CLOSE_AND_MERGED=false"
         fi
-    
+      shell: bash
+
     - run: goodbye.sh
       shell: bash
