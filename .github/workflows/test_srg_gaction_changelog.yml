@@ -9,6 +9,6 @@ jobs:
       - id: foo
         uses: SweetRainGarden/SrgGactionChangelogApp@develop
         with:
-          who-to-greet: 'Mona the Octocat'
+          who-to-greet: 'Everybody'
       - run: echo random-number ${{ steps.foo.outputs.random-number }}
         shell: bash
