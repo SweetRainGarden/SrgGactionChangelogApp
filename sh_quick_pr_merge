@@ -1,0 +1,146 @@
+#!/usr/bin/env bash
+# grammar: diff: -> add diff in readme
+# diff: todo -> add todo in readme
+#
+
+log_txt=docs/log.txt
+pwd_dir=$(pwd)
+repo_dir_path="${pwd_dir}"
+if [ -n "$1" ]; then
+
+  if grep -q "diff:" <<<"$1"; then
+    # shellcheck disable=SC2001
+
+    msg=$(sed "s/diff://g" <<<"$1")
+    if grep -q "todo" <<<"$msg"; then
+      msg=$(sed "s/todo//g" <<<"$msg")
+      hasTodo="true"
+    fi
+    addDiffToReadme="true"
+  else
+    msg="$1"
+  fi
+
+fi
+
+cd "$repo_dir_path" || return
+
+hasNotRunKtlintCheck="true"
+
+# for machine_name in {"mobile_app_machine","mobile_app_machine_1","mobile_app_machine_2","mobile_app_machine_3","mobile_app_machine_5","mobile_app_machine_6","mobile_app_machine_7","mobile_app_machine_8"}; do
+for machine_name in {"","","ubuntu-latest",""}; do
+
+  if [[ -z "${machine_name}" ]]; then
+    echo "empty machine_name"
+    continue
+  fi
+
+  current_time=$(date +"%m_%d-%H.%M.%S")
+
+#  start_branch="release/0.5.0"
+  start_branch="develop"
+
+  local_branch=$(git rev-parse --abbrev-ref HEAD)
+
+  if [ "$local_branch" == "${start_branch}" ]; then
+    test_branch="test/${current_time}"
+    git checkout -b "${test_branch}"
+  else
+    test_branch="$local_branch"
+    git fetch
+    git pull --rebase
+  fi
+
+  mkdir -p docs
+
+  machine=$(grep -m 1 'runs-on' ./.github/workflows/test_srg_gaction_changelog.yml | cut -d "," -f 2 | cut -d "]" -f 1 | sed 's/ //g')
+  sed -i '' "s/, ${machine}/, ${machine_name}/g" ./.github/workflows/test_srg_gaction_changelog.yml
+  machine="${machine_name}"
+
+  ci_trigger_txt="./docs/test_ci_change.txt"
+#  ci_trigger_txt="./WyzeAppKmmsdkAndroid/WyzePluginKnetworkKotlin/test_ci_change.txt"
+  touch "$ci_trigger_txt"
+
+    
+  if [[ -z $(git status -s) ]]; then
+    echo "no local file changes, generate new commit by add time stamp to test_ci_change.txt"
+    git add .
+    branch_name=$(git rev-parse --abbrev-ref HEAD)
+    touch "$ci_trigger_txt"
+    echo "${branch_name} -> ${current_time}" >>"$ci_trigger_txt"
+    git add "$ci_trigger_txt"
+    git commit -m "commit only for test_ci_change: ${machine}, ${current_time} "
+  else
+    echo "has local file changes, add it and commit it"
+    echo "${branch_name} -> ${current_time}" >>"$ci_trigger_txt"
+    git add .
+    if [[ -z "${msg}" ]]; then
+      echo "empty msg string"
+      git commit -m "auto commit mes : ${machine}, ${current_time}"
+    else
+      git commit -m "$msg"
+    fi
+  fi
+
+
+
+
+  git push origin "${test_branch}"
+  sleep 1
+  if [[ -z "${msg}" ]]; then
+    pr_link=$(gh pr create --base "$start_branch" --title "run on ${machine}, ${current_time}" --body "Merge PR by script")
+  else
+    pr_link=$(gh pr create --base "
+    $start_branch" --title "$msg" --body "Merge PR by script")
+  fi
+
+  sleep 3
+  echo "pr: ${pr_link}"
+  # gh pr merge "${pr_link}" -r -d
+  gh pr merge "${pr_link}" -r -d --admin
+  #   gh pr merge "${pr_link}" -r -d --auto
+  git checkout "$start_branch"
+  git pull --rebase
+
+  commit_id=$(git rev-parse HEAD)
+
+  #https://github.com/wyzelabs-inc/WyzeAppKmmsdkPoc/commit/f2275ec063704539865ecdd3d29db8e27e2a1ef1
+  #if msg contains diff:
+  #git last commit id
+
+  #https://github.com/wyzelabs-inc/WyzeAppKmmsdkPoc/pull/166/files
+
+  if [[ -z "${addDiffToReadme}" ]]; then
+    echo "do not add diff to readme file"
+  else
+    echo "do add diff to readme file"
+    if [[ "${hasTodo}" == "true" ]]; then
+      echo "- [ ] [$msg](${pr_link}/files)" >>README.md
+    else
+      echo "- [$msg](${pr_link}/files)" >>README.md
+    fi
+
+    git add README.md
+    git commit -m "add diff link for commit: $commit_id"
+    git push
+  fi
+
+  #note:
+  #1, if the PR title is empty, Github will use the latest commit message as the PR title
+
+  #  https://ai-tag-mapping-api.wyzecam.com/ai-tag-mapping
+done
+# ./gradlew ktlintFormat
+# ./gradlew ktlintCheck
+#detekt - Runs a detekt analysis and complexity report on your source files. Configure the analysis inside the detekt closure.
+#By default, the standard rule set without any ignore list is executed on sources files located in src/main/java, src/test/java, src/main/kotlin and src/test/kotlin.
+#Reports are automatically generated in xml, html, txt, md, and sarif format and can be found in build/reports/detekt/detekt.[xml|html|txt|md|sarif] respectively.
+#Please note that the detekt task is automatically run when executing gradle check.
+#You may specify Gradle task CLI option for auto correction, such as gradle detekt --auto-correct.
+#detektGenerateConfig - Generates a default detekt configuration file into your project directory.
+#detektBaseline - Similar to detekt, but creates a code smell baseline. Further detekt runs will only feature new smells not in this list.
+
+#./gradlew :WyzePluginKmmsdkPoc:detekt
+#./gradlew :WyzeAppKmmsdkAndroid:detekt
+#./gradlew :WyzeAppKmmsdkAndroid:WyzePluginKnetworkKotlin:detekt
+#
