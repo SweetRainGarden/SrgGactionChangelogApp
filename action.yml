@@ -35,7 +35,7 @@ runs:
         elif [[ "${{github.event.pull_request.merged}}" == false && "${{github.event.action}}" == closed ]]; then
           echo "----------------------------> PR closed without merging, do nothing. <----------------------------"
         else
-          echo "----------------------------> PR event action:${{github.event.action}}. <----------------------------"
+          echo "----------------------------> PR event action:${{github.event_name}}. <----------------------------"
         fi
       shell: bash
 
