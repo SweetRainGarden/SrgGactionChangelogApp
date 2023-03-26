@@ -9,6 +9,6 @@ jobs:
       - id: foo
         uses: SweetRainGarden/SrgGactionChangelogApp@develop
         with:
-          who-to-greet: 'Everybody'
+          jira-domain: 'xxx.atlassian.net'
       - run: echo random-number ${{ steps.foo.outputs.random-number }}
         shell: bash
