@@ -1,8 +1,8 @@
 name: 'Srg auto collect changelog'
 description: 'Auto collect changelog'
 inputs:
-  jira_domain:  # id of input ddd
-    description: 'Who to greet'
+  jira-domain:  # id of input ddd
+    description: 'The company Jira domain'
     required: true
     default: 'World'
 outputs:
