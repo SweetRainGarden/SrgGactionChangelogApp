@@ -3,7 +3,6 @@
 # diff: todo -> add todo in readme
 #
 
-log_txt=docs/log.txt
 pwd_dir=$(pwd)
 repo_dir_path="${pwd_dir}"
 if [ -n "$1" ]; then
@@ -25,7 +24,6 @@ fi
 
 cd "$repo_dir_path" || return
 
-hasNotRunKtlintCheck="true"
 
 # for machine_name in {"mobile_app_machine","mobile_app_machine_1","mobile_app_machine_2","mobile_app_machine_3","mobile_app_machine_5","mobile_app_machine_6","mobile_app_machine_7","mobile_app_machine_8"}; do
 for machine_name in {"","","ubuntu-latest",""}; do
