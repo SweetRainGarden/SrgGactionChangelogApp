@@ -1,4 +1,10 @@
-on: [push]
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+      - release/*
+    types: [ closed ]
 
 jobs:
   hello_world_job:
