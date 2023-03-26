@@ -28,7 +28,7 @@ runs:
     - run: echo "dump test"
       shell: bash
     
-    - run: echo "$pwd"
+    - run: pwd
       shell: bash
     
     - run: goodbye.sh
