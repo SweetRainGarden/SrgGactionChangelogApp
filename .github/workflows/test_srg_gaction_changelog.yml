@@ -23,5 +23,6 @@ jobs:
           jira-domain: 'xxx.atlassian.net'
       - run: | 
           echo random-number ${{ steps.foo.outputs.jira_ticket_list }}
-          echo "env: ---> ${{ env.PR_STATE }}"
+          echo "PR_STATE env: ---> ${{ env.PR_STATE }}"
+          echo "BASH_ENV env: ---> ${{ env.BASH_ENV }}"
         shell: bash
