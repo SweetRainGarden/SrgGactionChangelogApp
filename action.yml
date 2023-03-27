@@ -32,10 +32,13 @@ runs:
 
         if [[ "${{github.event.pull_request.merged}}" == true && "${{github.event.action}}" == closed ]]; then
           echo "----------------------------> PR merged and closed. <----------------------------"
+          echo "PR_STATE=CLOSED_AND_MERGED" >> $GITHUB_ENV
         elif [[ "${{github.event.pull_request.merged}}" == false && "${{github.event.action}}" == closed ]]; then
           echo "----------------------------> PR closed without merging, do nothing. <----------------------------"
+          echo "PR_STATE=CLOSED_BUT_NOT_MERGED" >> $GITHUB_ENV
         else
-          echo "----------------------------> PR event action:${{github.event_name}}. <----------------------------"
+          echo "----------------------------> PR event action:${{github.event_name}} <----------------------------"
+          echo "PR_STATE=COMMIT_PUSH" >> $GITHUB_ENV
         fi
       shell: bash
 
