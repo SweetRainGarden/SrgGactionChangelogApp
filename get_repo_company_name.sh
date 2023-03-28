@@ -7,8 +7,8 @@ mapStringFromUpperCaseFormatToDashLowerCaseFormat() {
   pluginName="$1"
   DELIMITER_DASH="-"
   # for loop all the characters in a string
-  for ((i = 1; i <= ${#pluginName}; i++)); do
-    character="${pluginName:$i-1:1}"
+  for ((i = 0; i <= ${#pluginName}; i++)); do
+    character="${pluginName:$i:1}"
     # check if the character is uppercase
     if [[ "$character" =~ [A-Z] ]]; then
       #convert a character/string from upper case to lower case
