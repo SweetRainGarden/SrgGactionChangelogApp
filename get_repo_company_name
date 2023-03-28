@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
+
 repo_full_name=$1
-# WyzeAppCisampleAndroid --> wyze-app-cisample-android
+# SrgAppCisampleAndroid --> srg-app-cisample-android
 mapStringFromUpperCaseFormatToDashLowerCaseFormat() {
   stringBuilder=""
   pluginName="$1"
@@ -25,7 +26,7 @@ mapStringFromUpperCaseFormatToDashLowerCaseFormat() {
   echo "${stringBuilder}"
 }
 
-#wyze-app-cisample-android --> wyze
+#srg-app-cisample-android --> srg
 getRepoCompanyName() {
   dashFormatString="$1"
   DELIMITER_DASH="-"
@@ -33,7 +34,7 @@ getRepoCompanyName() {
   echo "${a_company_name}"
 }
 
-# WyzeAppCisampleAndroid --> wyze
+# SrgAppCisampleAndroid --> srg
 getRepoCompanyNameFromRepoName() {
   dash_repo_name=$(mapStringFromUpperCaseFormatToDashLowerCaseFormat "$1")
   a_company_name=$(getRepoCompanyName "${dash_repo_name}")
