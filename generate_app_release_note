@@ -1,0 +1,170 @@
+#!/usr/bin/env bash
+
+##############################################################################
+##
+##  generate release note in the root of repo by the last tag
+##
+##############################################################################
+
+# pre-check for essential parameters
+while [ $# -gt 0 ]; do
+	if [[ $1 == *"--"* ]]; then
+		v="${1/--/}"
+		declare -r "$v"="$2"
+	fi
+	shift
+done
+required_parameters=("repo_root_dir" "release_note_abs_path" "last_release_tag" "this_release_tag")
+for parameter in "${required_parameters[@]}"; do
+	parameter_value=$(eval echo \$"$parameter")
+	if [ -z "$parameter_value" ]; then
+		echo "please input parameter --$parameter"
+		exit
+	fi
+done
+
+echo ""
+echo "--------------------------------------------------------------------------------------"
+echo "Input parameters:"
+for parameter in "${required_parameters[@]}"; do
+	parameter_value=$(eval echo \$"$parameter")
+	echo "${parameter} = ${parameter_value}"
+done
+echo "--------------------------------------------------------------------------------------"
+echo ""
+
+cd "${repo_root_dir}" || return
+
+release_note="${last_release_tag}_to_${this_release_tag}_release_note.md"
+
+release_note_log="release_note_log.txt"
+release_note_google_play="${last_release_tag}_to_${this_release_tag}_release_note_google_play.md"
+release_note_temp="release_note_temp.txt"
+release_note_temp_ticket="release_note_temp_ticket.txt"
+release_note_temp_ticket_domain="release_note_temp_ticket_domain.txt"
+
+mkdir -p "$release_note_abs_path"
+
+if [ -f "$release_note_abs_path/$release_note" ]; then
+	rm -f "$release_note_abs_path/$release_note"
+	touch "$release_note_abs_path/$release_note"
+fi
+if [ -f "$release_note_abs_path/$release_note_google_play" ]; then
+	rm -f "$release_note_abs_path/$release_note_google_play"
+	touch "$release_note_abs_path/$release_note_google_play"
+fi
+
+if [ -f "$release_note_abs_path/$release_note_temp" ]; then
+	rm -f "$release_note_abs_path/$release_note_temp"
+	touch "$release_note_abs_path/$release_note_temp"
+fi
+if [ -f "$release_note_abs_path/$release_note_temp_ticket" ]; then
+	rm -f "$release_note_abs_path/$release_note_temp_ticket"
+	touch "$release_note_abs_path/$release_note_temp_ticket"
+fi
+if [ -f "$release_note_abs_path/$release_note_temp_ticket_domain" ]; then
+	rm -f "$release_note_abs_path/$release_note_temp_ticket_domain"
+	touch "$release_note_abs_path/$release_note_temp_ticket_domain"
+fi
+
+if [ -f "$release_note_abs_path/$release_note_log" ]; then
+	rm -f "$release_note_abs_path/$release_note_log"
+	touch "$release_note_abs_path/$release_note_log"
+fi
+
+if [[ -z "${last_release_tag}" ]]; then
+	last_release_tag=$(git describe --tags --abbrev=0)
+fi
+
+#convert log info to lower case only
+git log --pretty="%h - %s (%an)" "$last_release_tag..$this_release_tag" | awk '{print tolower($0)}' >"$release_note_abs_path/$release_note_log"
+
+#extract description by grep feat|fix|ci|chore|docs|merge from release_note_log
+cat "$release_note_abs_path/$release_note_log" | grep -i -E "(feat|fix|ci|chore|docs):" | cut -d '-' -f2- | sort -u | sort -n |sed -e 's/([^()]*)//g' >"$release_note_abs_path/$release_note_temp"
+
+#extract ticket from release_note_log by grep ([a-z]{2,}-)([0-9]+)
+cat "$release_note_abs_path/$release_note_log" | grep -Eo '([a-z]{2,}-)([0-9]+)' | sort -u | sort -n >"$release_note_abs_path/$release_note_temp_ticket"
+
+roku_ticket_id="owl"
+roku_ticket_id_moband="moband"
+roku_ticket_id_aspen="aspen"
+roku_link_prefix_sed_form="https:\/\/jira.portal.roku.com:8443\/browse\/"
+non_roku_link_prefix_sed_form="https:\/\/wyzelabs.atlassian.net\/browse\/"
+
+while IFS= read -r ticket_id; do
+	min_ticket_length=5
+	ticket_length=${#ticket_id}
+	#sanity check: if the ticket's string length is less than 5, ignore this ticket.
+	# shellcheck disable=SC2004
+	if (($ticket_length >= $min_ticket_length)); then
+		if [[ "${ticket_id}" == *"${roku_ticket_id}"* || "${ticket_id}" == *"${roku_ticket_id_moband}"* || "${ticket_id}" == *"${roku_ticket_id_aspen}"* ]]; then
+			ticket_link="https://jira.portal.roku.com:8443/browse/${ticket_id}"
+			ticket_link_sed_form="${roku_link_prefix_sed_form}${ticket_id}"
+		else
+			ticket_link="https://wyzelabs.atlassian.net/browse/${ticket_id}"
+			ticket_link_sed_form="${non_roku_link_prefix_sed_form}${ticket_id}"
+		fi
+		echo "- [$ticket_id](${ticket_link})" >>"$release_note_abs_path/$release_note_temp_ticket_domain"
+
+		if [ "$RUNNER_OS" == "Linux" ]; then
+			sed -i "s/$ticket_id/[${ticket_id}]($ticket_link_sed_form)/g" "$release_note_abs_path/$release_note_temp"
+		elif [ "$RUNNER_OS" == "macOS" ]; then
+			sed -i '' "s/$ticket_id/[${ticket_id}]($ticket_link_sed_form)/g" "$release_note_abs_path/$release_note_temp"
+		else
+			echo "\$RUNNER_OS is not supported"
+			exit 1
+		fi
+
+	fi
+
+done <"$release_note_abs_path/$release_note_temp_ticket"
+current_time=$(date +%F_%H-%M-%S)
+
+echo "# Changelog: ${current_time}" >"$release_note_abs_path/$release_note"
+echo "Between App version: $last_release_tag and ${this_release_tag}" >>"$release_note_abs_path/$release_note"
+
+if [ -s "$release_note_abs_path/$release_note_temp_ticket" ]; then
+	echo "## Tickets summarization" >>"$release_note_abs_path/$release_note"
+	cat "$release_note_abs_path/$release_note_temp_ticket_domain" >>"$release_note_abs_path/$release_note"
+
+fi
+
+if [ -s "$release_note_abs_path/$release_note_temp" ]; then
+	echo "## Code merge detail" >>"$release_note_abs_path/$release_note"
+fi
+while IFS= read -r line; do
+	echo "- $line" >>"$release_note_abs_path/$release_note"
+done <"$release_note_abs_path/$release_note_temp"
+
+cat "$release_note_abs_path/$release_note" >>"$release_note_abs_path/$release_note_google_play"
+
+#google play release note's size limitation is 500 unicode character
+truncate -s 500 "$release_note_abs_path/$release_note_google_play"
+
+# delete temp files
+
+if [ -f "$release_note_abs_path/$release_note_temp" ]; then
+	rm -f "$release_note_abs_path/$release_note_temp"
+fi
+if [ -f "$release_note_abs_path/$release_note_temp_ticket" ]; then
+	rm -f "$release_note_abs_path/$release_note_temp_ticket"
+fi
+if [ -f "$release_note_abs_path/$release_note_temp_ticket_domain" ]; then
+	rm -f "$release_note_abs_path/$release_note_temp_ticket_domain"
+fi
+
+if [ -f "$release_note_abs_path/$release_note_log" ]; then
+	rm -f "$release_note_abs_path/$release_note_log"
+fi
+
+echo ""
+echo "--------------------------------------------------------------------------------------"
+echo "Output file format   is: \${last_release_tag}_to_\${this_release_tag}_release_note.md"
+echo "Output file location is: $release_note_abs_path/$release_note"
+echo "Output file format   is: \${last_release_tag}_to_\${this_release_tag}_release_note_google_play.md"
+echo "Output file location is: $release_note_abs_path/$release_note_google_play"
+echo "--------------------------------------------------------------------------------------"
+echo ""
+
+#/home/ubuntu/_work/WyzeAppCisampleAndroid/WyzeAppCisampleAndroid/WyzeAppCisampleAndroid/app_release/v2.30.0.29_to_v2.30.0.30_release_note.md
+#/home/ubuntu/_work/WyzeAppCisampleAndroid/WyzeAppCisampleAndroid/WyzeAppCisampleAndroid/app_release/v2.30.0.29_to_v2.30.0.30_release_note.md
