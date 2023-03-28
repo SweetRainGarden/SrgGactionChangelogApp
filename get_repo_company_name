@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-
+#!/usr/bin/env sh
 repo_full_name=$1
 # WyzeAppCisampleAndroid --> wyze-app-cisample-android
 mapStringFromUpperCaseFormatToDashLowerCaseFormat() {
