@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
 repo_full_name=$1
 # SrgAppCisampleAndroid --> srg-app-cisample-android
