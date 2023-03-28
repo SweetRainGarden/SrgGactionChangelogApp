@@ -44,7 +44,5 @@ runs:
 
     - run: goodbye.sh
       shell: bash
-    - run: |
-        repo_company_name=$(get_repo_company_name.sh "SrgGactionChangelogApp")
-        echo "repo_company_name --> ${repo_company_name}"
+    - run: get_repo_company_name.sh "SrgGactionChangelogApp"
       shell: bash
