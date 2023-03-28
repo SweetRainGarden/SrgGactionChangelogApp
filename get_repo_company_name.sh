@@ -7,8 +7,7 @@ mapStringFromUpperCaseFormatToDashLowerCaseFormat() {
   pluginName="$1"
   DELIMITER_DASH="-"
   # for loop all the characters in a string
-  for ((i = 0; i <= ${#pluginName}; i++)); do
-    character="${pluginName:$i:1}"
+  while read -n1 character; do
     # check if the character is uppercase
     if [[ "$character" =~ [A-Z] ]]; then
       #convert a character/string from upper case to lower case
@@ -22,7 +21,26 @@ mapStringFromUpperCaseFormatToDashLowerCaseFormat() {
     else
       stringBuilder="${stringBuilder}$character"
     fi
-  done
+
+  done <<< "${pluginName}"
+
+  # for ((i = 0; i <= ${#pluginName}; i++)); do
+  #   character="${pluginName:$i:1}"
+  #   # check if the character is uppercase
+  #   if [[ "$character" =~ [A-Z] ]]; then
+  #     #convert a character/string from upper case to lower case
+  #     character_in_lowercase=$(echo -e "${character}" | tr '[:upper:]' '[:lower:]')
+  #     # check if stringBuilder is not empty
+  #     if [ -n "${stringBuilder}" ]; then
+  #       stringBuilder="${stringBuilder}${DELIMITER_DASH}${character_in_lowercase}"
+  #     else
+  #       stringBuilder="${character_in_lowercase}"
+  #     fi
+  #   else
+  #     stringBuilder="${stringBuilder}$character"
+  #   fi
+  # done
+
   echo "${stringBuilder}"
 }
 
