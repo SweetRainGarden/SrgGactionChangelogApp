@@ -17,7 +17,6 @@ jobs:
     name: "Test SrgGactionChangelogApp"
     steps:
       - id: collect_jira_tickets_in_pr
-        if: "${{ github.event.pull_request.merged }}" == 'true'
         uses: SweetRainGarden/SrgGactionChangelogApp@develop
         with:
           jira_domain: 'xxx.atlassian.net'
