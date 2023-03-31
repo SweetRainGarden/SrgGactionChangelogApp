@@ -77,6 +77,8 @@ runs:
             sudo apt-get update && sudo apt-get install -y jq
           fi
 
+          echo "---> $COMMITS_API_RESPONSE"
+
           COMMITS=$(echo $COMMITS_API_RESPONSE | jq -r '.[] | "\(.sha) - \(.commit.message)"')
           echo "Commits in the pull request:"
           echo "$COMMITS"
