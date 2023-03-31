@@ -53,11 +53,17 @@ runs:
         PR_NUMBER=${{ github.event.pull_request.number }}
         echo "Pull request number: $PR_NUMBER"
 
-        git fetch origin pull/$PR_NUMBER/head:pr_branch
+        PR_BRANCH=${{ github.event.pull_request.head.ref }}
+        TARGET_BRANCH=${{ github.event.pull_request.base.ref }}
+        echo "PR branch: $PR_BRANCH"
+        echo "Target branch: $TARGET_BRANCH"
 
-        COMMITS=$(git log --pretty=format:"%h - %s" origin/main..pr_branch)
+        git fetch origin $PR_BRANCH
+        git fetch origin $TARGET_BRANCH
+
+        COMMITS=$(git log --pretty=format:"%h - %s" $TARGET_BRANCH..$PR_BRANCH)
         echo "Commits in the pull request:"
-        echo "$COMMITS"
+        echo "---> $COMMITS"
       shell: bash
 
     - run: |
