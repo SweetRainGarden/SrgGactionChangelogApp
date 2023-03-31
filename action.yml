@@ -1,19 +1,17 @@
 name: 'Srg auto collect changelog'
 description: 'Auto collect changelog'
 inputs:
-  jira_domain:  # id of input ddd
+  jira_domain:
     description: 'The company Jira domain'
     required: true
     default: 'srgxxxx.atlassian.net'
-  gh_token:  # id of input ddd
-    description: 'gh_token'
+  gh_token:
+    description: 'A Github token with read permission for repos'
     required: true
-    default: ''
 outputs:
   jira_ticket_list:
     description: "The jira tickets list form pull request and commit message"
     value: ${{ steps.extract_jira_tickets.outputs.jira_ticket_list }}
-
 runs:
   using: "composite"
   steps:
@@ -22,14 +20,15 @@ runs:
 
     - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
       shell: bash
+
     # - run: echo "${{ toJSON(github) }}"
     #   shell: bash
+
     - run: pwd
       shell: bash
 
     - run: |
         echo "github event action: ${{github.event.action}}"
-
         if [[ "${{github.event.pull_request.merged}}" == true && "${{github.event.action}}" == closed ]]; then
           echo "----------------------------> PR merged and closed. <----------------------------"
           echo "PR_STATE=CLOSED_AND_MERGED" >> $GITHUB_ENV
@@ -44,23 +43,19 @@ runs:
 
     - run: goodbye.sh
       shell: bash
+
     - run: |
         repo_org_name=$(get_repo_company_name.sh "SrgGactionChangelogApp")
         echo "repo_org_name --> $repo_org_name"
       shell: bash
 
     - run: |
-
         PR_NUMBER="${{ github.event.pull_request.number }}"
         REPO_NAME="${{ github.repository }}"
         API_URL="https://api.github.com/repos/$REPO_NAME/pulls/$PR_NUMBER/commits"
-
         TEMP_FILE="temp.txt"
         COMMITS_FILE="commits.txt"
         curl -s -H "Authorization: token ${{ inputs.gh_token }}" -H "Accept: application/vnd.github+json" $API_URL > $TEMP_FILE
-
-
-        echo "Pull request number: $PR_NUMBER"
 
         PR_MERGED="${{ github.event.pull_request.merged }}"
         if [ "$PR_MERGED" = "true" ]; then
@@ -75,25 +70,17 @@ runs:
           cat $COMMITS_FILE
           echo "---------------------------------------------"
           cat $TEMP_FILE
-
         else
           echo "Pull request was not merged, unable to retrieve commits."
         fi
       shell: bash
 
-    - run: |
-        PR_TITLE="${{ github.event.pull_request.title }}"
-        PR_BODY="${{ github.event.pull_request.body }}"
-
-        echo "Pull request title --> $PR_TITLE"
-        echo "Pull request body --> $PR_BODY"
-
+    - name: "GGG -> init env --> 1: PR_CONTENT_TXT"
+      run: |
         echo "PR_CONTENT_TXT=pr_and_branch_info.txt" >> $GITHUB_ENV
       shell: bash
 
-
-
-    - name: "HHH -> Publish AAR env --> 2: init ${{ env.PR_CONTENT_TXT }}"
+    - name: "GGG -> init env --> 2: write PR info in file: ${{ env.PR_CONTENT_TXT }}"
       uses: DamianReeves/write-file-action@master
       with:
         path: "./${{ env.PR_CONTENT_TXT }}"
@@ -102,7 +89,6 @@ runs:
           "${{ github.event.pull_request.title }}"
           "${{ github.event.pull_request.body }}"
         write-mode: overwrite
-
 
     - name: "extract jira ticket from pr and commits"
       id: extract_jira_tickets
