@@ -4,9 +4,9 @@ on:
       - main
       - develop
       - release/*
-    types: [ closed, open, reopened, draft ]
+    types: [ closed, opened, reopened, draft ]
     # draft: change ticket status to in progress
-    # open/reopened: attach apk to ticket
+    # opened/reopened: attach apk to ticket
     # closed: attach pr link to tikcet
 
 jobs:
