@@ -87,11 +87,28 @@ runs:
 
         echo "Pull request title --> $PR_TITLE"
         echo "Pull request body --> $PR_BODY"
+
+        echo "PR_CONTENT_TXT=pr_and_branch_info.txt" >> $GITHUB_ENV
       shell: bash
+
+
+
+    - name: "HHH -> Publish AAR env --> 2: init ${{ env.PR_CONTENT_TXT }}"
+      uses: DamianReeves/write-file-action@master
+      with:
+        path: "./${{ env.PR_CONTENT_TXT }}"
+        contents: |
+          "${{ github.head_ref }}"
+          "${{ github.event.pull_request.title }}"
+          "${{ github.event.pull_request.body }}"
+        write-mode: overwrite
+
 
     - name: "extract jira ticket from pr and commits"
       id: extract_jira_tickets
       run: |
         echo "jira_ticket_list=$(echo abc-$RANDOM)" >> $GITHUB_OUTPUT
         echo " hello extract_jira_tickets step"
+        echo "------------------------------------------"
+        cat "./${{ env.PR_CONTENT_TXT }}"
       shell: bash
