@@ -63,7 +63,7 @@ runs:
           git fetch origin $TARGET_BRANCH
           git fetch origin $MERGE_COMMIT
 
-          PARENT_COMMIT=$(git rev-parse $MERGE_COMMIT^2)
+          PARENT_COMMIT=$(git rev-list --parents -n 1 $MERGE_COMMIT | awk '{print $3}')
           COMMITS=$(git log --pretty=format:"%h - %s" $TARGET_BRANCH..$PARENT_COMMIT)
           echo "Commits in the pull request:"
           echo "$COMMITS"
