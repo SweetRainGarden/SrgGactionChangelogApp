@@ -71,11 +71,11 @@ runs:
             exit 1
           fi
 
-          cat $TEMP_FILE | jq -r '.[] | "\(.sha) - \(.commit.message)"' > "./${{ env.$COMMITS_FILE }}"
-
-          cat "./${{ env.$COMMITS_FILE }}"
-          echo "---------------------------------------------"
           cat "./${{ env.TEMP_FILE}}"
+          echo "---------------------------------------------"
+          cat "./${{ env.TEMP_FILE}}" | jq -r '.[] | "\(.sha) - \(.commit.message)"' > "./${{ env.COMMITS_FILE }}"
+          cat "./${{ env.COMMITS_FILE }}"
+
           
         else
           echo "Pull request was not merged, unable to retrieve commits."
