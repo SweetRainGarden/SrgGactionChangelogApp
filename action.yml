@@ -81,6 +81,7 @@ runs:
           cat $TEMP_FILE | jq -r '.[] | "\(.sha) - \(.commit.message)"' > $COMMITS_FILE
           
           cat $COMMITS_FILE
+          echo "---------------------------------------------"
           cat $TEMP_FILE
 
         else
