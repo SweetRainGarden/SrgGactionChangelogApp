@@ -103,13 +103,10 @@ runs:
     - name: "extract jira ticket from pr and commits"
       id: extract_jira_tickets
       run: |
+        srg_changelog_abs_path="$(pwd)/${{ env.SRG_CHANGLOG_FILE }}"
         echo "jira_ticket_list=$(echo abc-$RANDOM)" >> $GITHUB_OUTPUT
-        echo "srg_changelog_file=${{ env.SRG_CHANGLOG_FILE }}" >> $GITHUB_OUTPUT
-        echo "srg_changelog_file=${{ env.SRG_CHANGLOG_FILE }}" >> $GITHUB_OUTPUT
+        echo "srg_changelog_file=$srg_changelog_abs_path" >> $GITHUB_OUTPUT
         echo "srg_test_output=Hello_output_gaction" >> $GITHUB_OUTPUT
-        echo " hello extract_jira_tickets step"
-        echo "------------------------------------------"
-        cat "./${{ env.SRG_PR_CONTENT_TXT }}"
       shell: bash
 
     - name: "ZZZ -> Clean up --> 1: txt files"
