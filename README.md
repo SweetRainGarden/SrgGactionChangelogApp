@@ -4,4 +4,3 @@
 - parameter
   + custom Jira domain url
   + Jira token for publish changelog to confluence page
-  
