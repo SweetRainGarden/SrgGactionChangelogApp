@@ -10,7 +10,7 @@ on:
     # closed: attach pr link to tikcet
 
 jobs:
-  hello_world_job:
+  generate_changelog:
     runs-on: [ ubuntu-latest ]
     name: "Test SrgGactionChangelogApp"
     steps:
@@ -19,12 +19,9 @@ jobs:
         with:
           jira_domain: 'xxx.atlassian.net'
           gh_token: "${{ secrets.ORG_SECRET_CI_TOKEN }}"
-      - run: | 
-
-          #  echo "jira_ticket_list=$(echo abc-$RANDOM)" >> $GITHUB_OUTPUT
-          # echo "srg_changelog_file=$srg_changelog_abs_path" >> $GITHUB_OUTPUT
-          # echo "srg_test_output=
-
+      
+      - name: "Print outputs from SrgGactionChangelogApp"
+        run: | 
           echo "jira_ticket_list ---> ${{ steps.collect_jira_tickets_in_pr.outputs.jira_ticket_list }}"
           echo "srg_changelog_file ---> ${{ steps.collect_jira_tickets_in_pr.outputs.srg_changelog_file }}"
           echo "srg_test_output ---> ${{ steps.collect_jira_tickets_in_pr.outputs.srg_test_output }}"
