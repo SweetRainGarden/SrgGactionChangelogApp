@@ -59,10 +59,11 @@ runs:
         REPO_NAME=${{ github.repository }}
         API_URL="https://api.github.com/repos/$REPO_NAME/pulls/$PR_NUMBER/commits"
 
-        COMMITS_API_RESPONSE=$(curl -s -H "Authorization: token ${{ inputs.gh_token }}" -H "Accept: application/vnd.github+json" $API_URL)
-        echo "COMMITS_API_RESPONSE=$COMMITS_API_RESPONSE" >> $GITHUB_ENV
+        TEMP_FILE="temp.txt"
+        COMMITS_FILE="commits.txt"
+        curl -s -H "Authorization: token ${{ inputs.gh_token }}" -H "Accept: application/vnd.github+json" $API_URL > $TEMP_FILE
 
-        PR_NUMBER=${{ github.event.pull_request.number }}
+
         echo "Pull request number: $PR_NUMBER"
 
         PR_MERGED=${{ github.event.pull_request.merged }}
@@ -73,15 +74,15 @@ runs:
           jq_installed=$(command -v jq)
 
           if [ -z "$jq_installed" ]; then
-            echo "Installing jq"
-            sudo apt-get update && sudo apt-get install -y jq
+            echo "jq is not installed on the machie, exit..." 
+            exit 1
           fi
 
-          echo "---> $COMMITS_API_RESPONSE"
+          cat $TEMP_FILE | jq -r '.[] | "\(.sha) - \(.commit.message)"' > $COMMITS_FILE
+          
+          cat $COMMITS_FILE
+          cat $TEMP_FILE
 
-          COMMITS=$(echo $COMMITS_API_RESPONSE | jq -r '.[] | "\(.sha) - \(.commit.message)"')
-          echo "Commits in the pull request:"
-          echo "$COMMITS"
         else
           echo "Pull request was not merged, unable to retrieve commits."
         fi
