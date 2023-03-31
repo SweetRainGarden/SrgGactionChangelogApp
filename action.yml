@@ -67,18 +67,17 @@ runs:
 
         PR_MERGED=${{ github.event.pull_request.merged }}
         if [ "$PR_MERGED" = "true" ]; then
-          MERGE_COMMIT=${{ github.event.pull_request.merge_commit_sha }}
-          TARGET_BRANCH=${{ github.event.pull_request.base.ref }}
-          echo "Merge commit: $MERGE_COMMIT"
-          echo "Target branch: $TARGET_BRANCH"
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          echo "Pull request number: $PR_NUMBER"
 
-          git fetch origin $TARGET_BRANCH
-          git fetch origin $MERGE_COMMIT
+          jq_installed=$(command -v jq)
 
-          git checkout $MERGE_COMMIT
+          if [ -z "$jq_installed" ]; then
+            echo "Installing jq"
+            sudo apt-get update && sudo apt-get install -y jq
+          fi
 
-          PARENT_COMMIT=$(git rev-list --parents -n 1 $MERGE_COMMIT | awk '{print $3}')
-          COMMITS=$(git log --pretty=format:"%h - %s" $TARGET_BRANCH..$PARENT_COMMIT)
+          COMMITS=$(echo $COMMITS_API_RESPONSE | jq -r '.[] | "\(.sha) - \(.commit.message)"')
           echo "Commits in the pull request:"
           echo "$COMMITS"
         else
