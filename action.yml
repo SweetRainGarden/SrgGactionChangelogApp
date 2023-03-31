@@ -11,13 +11,13 @@ inputs:
 outputs:
   jira_ticket_list:
     description: "The jira tickets list form pull request and commit message"
-    value: ${{ steps.extract_jira_tickets.outputs.jira_ticket_list }}
+    value: ${{ steps.export_outputs_step.outputs.jira_ticket_list }}
   srg_test_output:
     description: "Test Github action output"
-    value: ${{ steps.extract_jira_tickets.outputs.srg_test_output }}
+    value: ${{ steps.export_outputs_step.outputs.srg_test_output }}
   srg_changelog_file:
     description: "The file that contains changelog of current pull request"
-    value: ${{ steps.extract_jira_tickets.outputs.srg_changelog_file }}
+    value: ${{ steps.export_outputs_step.outputs.srg_changelog_file }}
 runs:
   using: "composite"
   steps:
@@ -101,8 +101,11 @@ runs:
         write-mode: overwrite
 
     - name: "extract jira ticket from pr and commits"
-      id: extract_jira_tickets
+      id: export_outputs_step
       run: |
+        pwd
+        pwd=$(pwd)
+        echo "pwd -> $pwd"
         srg_changelog_abs_path="$(pwd)/${{ env.SRG_CHANGLOG_FILE }}"
         echo "jira_ticket_list=$(echo abc-$RANDOM)" >> $GITHUB_OUTPUT
         echo "srg_changelog_file=$srg_changelog_abs_path" >> $GITHUB_OUTPUT
