@@ -12,6 +12,12 @@ outputs:
   jira_ticket_list:
     description: "The jira tickets list form pull request and commit message"
     value: ${{ steps.extract_jira_tickets.outputs.jira_ticket_list }}
+  srg_test_output:
+    description: "Test Github action output"
+    value: ${{ steps.extract_jira_tickets.outputs.srg_test_output }}
+  srg_changelog_file:
+    description: "The file that contains changelog of current pull request"
+    value: ${{ steps.extract_jira_tickets.outputs.srg_changelog_file }}
 runs:
   using: "composite"
   steps:
@@ -49,6 +55,7 @@ runs:
         echo "SRG_PR_CONTENT_TXT=pr_and_branch_info.txt" >> $GITHUB_ENV
         echo "SRG_TEMP_FILE=temp.txt" >> $GITHUB_ENV
         echo "SRG_COMMITS_FILE=commits.txt" >> $GITHUB_ENV
+        echo "SRG_CHANGLOG_FILE=changelog.txt" >> $GITHUB_ENV
       shell: bash
 
     - run: |
@@ -76,7 +83,6 @@ runs:
           cat "./${{ env.SRG_TEMP_FILE}}" | jq -r '.[] | "\(.sha) - \(.commit.message)"' > "./${{ env.SRG_COMMITS_FILE }}"
           cat "./${{ env.SRG_COMMITS_FILE }}"
 
-          
         else
           echo "Pull request was not merged, unable to retrieve commits."
         fi
@@ -98,6 +104,9 @@ runs:
       id: extract_jira_tickets
       run: |
         echo "jira_ticket_list=$(echo abc-$RANDOM)" >> $GITHUB_OUTPUT
+        echo "srg_changelog_file=${{ env.SRG_CHANGLOG_FILE }}" >> $GITHUB_OUTPUT
+        echo "srg_changelog_file=${{ env.SRG_CHANGLOG_FILE }}" >> $GITHUB_OUTPUT
+        echo "srg_test_output=Hello_output_gaction" >> $GITHUB_OUTPUT
         echo " hello extract_jira_tickets step"
         echo "------------------------------------------"
         cat "./${{ env.SRG_PR_CONTENT_TXT }}"
