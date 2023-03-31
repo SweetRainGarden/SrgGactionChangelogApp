@@ -44,6 +44,13 @@ runs:
     - run: goodbye.sh
       shell: bash
 
+    - name: "AAA -> init env --> 1: PR_CONTENT_TXT"
+      run: |
+        echo "PR_CONTENT_TXT=pr_and_branch_info.txt" >> $GITHUB_ENV
+        echo "TEMP_FILE=temp.txt" >> $GITHUB_ENV
+        echo "COMMITS_FILE=commits.txt" >> $GITHUB_ENV
+      shell: bash
+
     - run: |
         repo_org_name=$(get_repo_company_name.sh "SrgGactionChangelogApp")
         echo "repo_org_name --> $repo_org_name"
@@ -53,9 +60,8 @@ runs:
         PR_NUMBER="${{ github.event.pull_request.number }}"
         REPO_NAME="${{ github.repository }}"
         API_URL="https://api.github.com/repos/$REPO_NAME/pulls/$PR_NUMBER/commits"
-        TEMP_FILE="temp.txt"
-        COMMITS_FILE="commits.txt"
-        curl -s -H "Authorization: token ${{ inputs.gh_token }}" -H "Accept: application/vnd.github+json" $API_URL > $TEMP_FILE
+ 
+        curl -s -H "Authorization: token ${{ inputs.gh_token }}" -H "Accept: application/vnd.github+json" $API_URL > "${{ env.TEMP_FILE}}"
 
         PR_MERGED="${{ github.event.pull_request.merged }}"
         if [ "$PR_MERGED" = "true" ]; then
@@ -65,20 +71,18 @@ runs:
             exit 1
           fi
 
-          cat $TEMP_FILE | jq -r '.[] | "\(.sha) - \(.commit.message)"' > $COMMITS_FILE
-          
-          cat $COMMITS_FILE
+          cat $TEMP_FILE | jq -r '.[] | "\(.sha) - \(.commit.message)"' > "./${{ env.$COMMITS_FILE }}"
+
+          cat "./${{ env.$COMMITS_FILE }}"
           echo "---------------------------------------------"
-          cat $TEMP_FILE
+          cat "./${{ env.TEMP_FILE}}"
+          
         else
           echo "Pull request was not merged, unable to retrieve commits."
         fi
       shell: bash
 
-    - name: "GGG -> init env --> 1: PR_CONTENT_TXT"
-      run: |
-        echo "PR_CONTENT_TXT=pr_and_branch_info.txt" >> $GITHUB_ENV
-      shell: bash
+
 
     - name: "GGG -> init env --> 2: write PR info in file: ${{ env.PR_CONTENT_TXT }}"
       uses: DamianReeves/write-file-action@master
