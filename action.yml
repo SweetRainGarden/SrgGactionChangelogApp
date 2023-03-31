@@ -48,3 +48,22 @@ runs:
         repo_org_name=$(get_repo_company_name.sh "SrgGactionChangelogApp")
         echo "repo_org_name --> $repo_org_name"
       shell: bash
+
+    - run: |
+        PR_NUMBER=${{ github.event.pull_request.number }}
+        echo "Pull request number: $PR_NUMBER"
+
+        git fetch origin pull/$PR_NUMBER/head:pr_branch
+
+        COMMITS=$(git log --pretty=format:"%h - %s" origin/main..pr_branch)
+        echo "Commits in the pull request:"
+        echo "$COMMITS"
+      shell: bash
+
+    - run: |
+        PR_TITLE=${{ github.event.pull_request.title }}
+        PR_BODY=${{ github.event.pull_request.body }}
+
+        echo "Pull request title: $PR_TITLE"
+        echo "Pull request body: $PR_BODY"
+      shell: bash
