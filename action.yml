@@ -1,10 +1,14 @@
 name: 'Srg auto collect changelog'
 description: 'Auto collect changelog'
 inputs:
-  jira-domain:  # id of input ddd
+  jira_domain:  # id of input ddd
     description: 'The company Jira domain'
     required: true
     default: 'srgxxxx.atlassian.net'
+  gh_token:  # id of input ddd
+    description: 'gh_token'
+    required: true
+    default: ''
 outputs:
   jira_ticket_list:
     description: "The jira tickets list form pull request and commit message"
@@ -55,7 +59,7 @@ runs:
         REPO_NAME=${{ github.repository }}
         API_URL="https://api.github.com/repos/$REPO_NAME/pulls/$PR_NUMBER/commits"
 
-        COMMITS_API_RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.ORG_SECRET_CI_TOKEN }}" -H "Accept: application/vnd.github+json" $API_URL)
+        COMMITS_API_RESPONSE=$(curl -s -H "Authorization: token ${{ inputs.gh_token }}" -H "Accept: application/vnd.github+json" $API_URL)
         echo "COMMITS_API_RESPONSE=$COMMITS_API_RESPONSE" >> $GITHUB_ENV
 
         PR_NUMBER=${{ github.event.pull_request.number }}
