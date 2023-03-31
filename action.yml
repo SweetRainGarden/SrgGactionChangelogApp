@@ -50,6 +50,14 @@ runs:
       shell: bash
 
     - run: |
+
+        PR_NUMBER=${{ github.event.pull_request.number }}
+        REPO_NAME=${{ github.repository }}
+        API_URL="https://api.github.com/repos/$REPO_NAME/pulls/$PR_NUMBER/commits"
+
+        COMMITS_API_RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.ORG_SECRET_CI_TOKEN }}" -H "Accept: application/vnd.github+json" $API_URL)
+        echo "COMMITS_API_RESPONSE=$COMMITS_API_RESPONSE" >> $GITHUB_ENV
+
         PR_NUMBER=${{ github.event.pull_request.number }}
         echo "Pull request number: $PR_NUMBER"
 
@@ -79,5 +87,5 @@ runs:
         PR_BODY=${{ github.event.pull_request.body }}
 
         echo "Pull request title: $PR_TITLE"
-        # echo "Pull request body: $PR_BODY"
+        echo "Pull request body: $PR_BODY"
       shell: bash
