@@ -46,9 +46,9 @@ runs:
 
     - name: "AAA -> init env --> 1: PR_CONTENT_TXT"
       run: |
-        echo "PR_CONTENT_TXT=pr_and_branch_info.txt" >> $GITHUB_ENV
-        echo "TEMP_FILE=temp.txt" >> $GITHUB_ENV
-        echo "COMMITS_FILE=commits.txt" >> $GITHUB_ENV
+        echo "SRG_PR_CONTENT_TXT=pr_and_branch_info.txt" >> $GITHUB_ENV
+        echo "SRG_TEMP_FILE=temp.txt" >> $GITHUB_ENV
+        echo "SRG_COMMITS_FILE=commits.txt" >> $GITHUB_ENV
       shell: bash
 
     - run: |
@@ -61,7 +61,7 @@ runs:
         REPO_NAME="${{ github.repository }}"
         API_URL="https://api.github.com/repos/$REPO_NAME/pulls/$PR_NUMBER/commits"
  
-        curl -s -H "Authorization: token ${{ inputs.gh_token }}" -H "Accept: application/vnd.github+json" $API_URL > "${{ env.TEMP_FILE}}"
+        curl -s -H "Authorization: token ${{ inputs.gh_token }}" -H "Accept: application/vnd.github+json" $API_URL > "${{ env.SRG_TEMP_FILE}}"
 
         PR_MERGED="${{ github.event.pull_request.merged }}"
         if [ "$PR_MERGED" = "true" ]; then
@@ -71,10 +71,10 @@ runs:
             exit 1
           fi
 
-          cat "./${{ env.TEMP_FILE}}"
+          cat "./${{ env.SRG_TEMP_FILE}}"
           echo "---------------------------------------------"
-          cat "./${{ env.TEMP_FILE}}" | jq -r '.[] | "\(.sha) - \(.commit.message)"' > "./${{ env.COMMITS_FILE }}"
-          cat "./${{ env.COMMITS_FILE }}"
+          cat "./${{ env.SRG_TEMP_FILE}}" | jq -r '.[] | "\(.sha) - \(.commit.message)"' > "./${{ env.SRG_COMMITS_FILE }}"
+          cat "./${{ env.SRG_COMMITS_FILE }}"
 
           
         else
@@ -84,10 +84,10 @@ runs:
 
 
 
-    - name: "GGG -> init env --> 2: write PR info in file: ${{ env.PR_CONTENT_TXT }}"
+    - name: "GGG -> init env --> 2: write PR info in file: ${{ env.SRG_PR_CONTENT_TXT }}"
       uses: DamianReeves/write-file-action@master
       with:
-        path: "./${{ env.PR_CONTENT_TXT }}"
+        path: "./${{ env.SRG_PR_CONTENT_TXT }}"
         contents: |
           "${{ github.head_ref }}"
           "${{ github.event.pull_request.title }}"
@@ -100,12 +100,12 @@ runs:
         echo "jira_ticket_list=$(echo abc-$RANDOM)" >> $GITHUB_OUTPUT
         echo " hello extract_jira_tickets step"
         echo "------------------------------------------"
-        cat "./${{ env.PR_CONTENT_TXT }}"
+        cat "./${{ env.SRG_PR_CONTENT_TXT }}"
       shell: bash
 
     - name: "ZZZ -> Clean up --> 1: txt files"
       run: |
-        rm -f "${{ env.PR_CONTENT_TXT }}"
-        rm -f "${{ env.TEMP_FILE }}"
-        rm -f "${{ env.COMMITS_FILE }}"
+        rm -f "${{ env.SRG_PR_CONTENT_TXT }}"
+        rm -f "${{ env.SRG_TEMP_FILE }}"
+        rm -f "${{ env.SRG_COMMITS_FILE }}"
       shell: bash
