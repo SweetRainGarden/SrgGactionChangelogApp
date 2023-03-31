@@ -102,3 +102,10 @@ runs:
         echo "------------------------------------------"
         cat "./${{ env.PR_CONTENT_TXT }}"
       shell: bash
+
+    - name: "ZZZ -> Clean up --> 1: txt files"
+      run: |
+        rm -f "${{ env.PR_CONTENT_TXT }}"
+        rm -f "${{ env.TEMP_FILE }}"
+        rm -f "${{ env.COMMITS_FILE }}"
+      shell: bash
