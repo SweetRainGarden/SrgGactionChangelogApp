@@ -55,20 +55,21 @@ runs:
 
         PR_MERGED=${{ github.event.pull_request.merged }}
         if [ "$PR_MERGED" = "true" ]; then
-          PR_BRANCH=${{ github.event.pull_request.head.sha }}
+          MERGE_COMMIT=${{ github.event.pull_request.merge_commit_sha }}
           TARGET_BRANCH=${{ github.event.pull_request.base.ref }}
-          echo "PR branch HEAD commit: $PR_BRANCH"
+          echo "Merge commit: $MERGE_COMMIT"
           echo "Target branch: $TARGET_BRANCH"
 
           git fetch origin $TARGET_BRANCH
+          git fetch origin $MERGE_COMMIT
 
-          COMMITS=$(git log --pretty=format:"%h - %s" $TARGET_BRANCH..$PR_BRANCH)
+          PARENT_COMMIT=$(git rev-parse $MERGE_COMMIT^2)
+          COMMITS=$(git log --pretty=format:"%h - %s" $TARGET_BRANCH..$PARENT_COMMIT)
           echo "Commits in the pull request:"
           echo "$COMMITS"
         else
           echo "Pull request was not merged, unable to retrieve commits."
         fi
-
       shell: bash
 
     - run: |
