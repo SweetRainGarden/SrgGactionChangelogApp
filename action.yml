@@ -104,7 +104,7 @@ runs:
       shell: bash
 
     - name: "ZZZ -> Clean up --> 1: txt files"
-      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && ${{github.event.pull_request.merged}} == true }}
+      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == 'true' }}
       run: |
         echo "------------- pull_request closed and merged ------------"
         rm -f "${{ env.SRG_PR_CONTENT_TXT }}"
