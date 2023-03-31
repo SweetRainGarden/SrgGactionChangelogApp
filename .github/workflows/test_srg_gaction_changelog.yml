@@ -20,7 +20,14 @@ jobs:
           jira_domain: 'xxx.atlassian.net'
           gh_token: "${{ secrets.ORG_SECRET_CI_TOKEN }}"
       - run: | 
-          echo random-number ${{ steps.collect_jira_tickets_in_pr.outputs.jira_ticket_list }}
+
+          #  echo "jira_ticket_list=$(echo abc-$RANDOM)" >> $GITHUB_OUTPUT
+          # echo "srg_changelog_file=$srg_changelog_abs_path" >> $GITHUB_OUTPUT
+          # echo "srg_test_output=
+
+          echo "jira_ticket_list ---> ${{ steps.collect_jira_tickets_in_pr.outputs.jira_ticket_list }}"
+          echo "srg_changelog_file ---> ${{ steps.collect_jira_tickets_in_pr.outputs.srg_changelog_file }}"
+          echo "srg_test_output ---> ${{ steps.collect_jira_tickets_in_pr.outputs.srg_test_output }}"
           echo "PR_STATE env: ---> ${{ env.PR_STATE }}"
           echo "BASH_ENV env: ---> ${{ env.BASH_ENV }}"
         shell: bash
