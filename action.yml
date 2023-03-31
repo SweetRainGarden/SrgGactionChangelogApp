@@ -20,8 +20,6 @@ runs:
     - run: echo Hello ${{ inputs.jira_domain }}.
       shell: bash
 
-
-      shell: bash
     - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
       shell: bash
     # - run: echo "${{ toJSON(github) }}"
@@ -96,3 +94,4 @@ runs:
       run: |
         echo "jira_ticket_list=$(echo abc-$RANDOM)" >> $GITHUB_OUTPUT
         echo " hello extract_jira_tickets step"
+      shell: bash
