@@ -1,3 +1,12 @@
+# --------------------------------------------------------------------------------------------------
+# Input: jira_domain, gh_token, and trigger keywords
+# Process: 
+# 1, extract jira ticket from dev's branch name, commits, pull request title, and pull request body
+# 2, extract commit based git commit convention with: fix:feat:chore convention
+# 3, append and inject the jira_domain into jira ticket of the step 2 in markdown format
+# 4, check if trigger keywords are in pull request title or body. (Optional)
+# Output: jira_tickets_list and absolute path of changelog.md 
+# --------------------------------------------------------------------------------------------------
 name: 'Srg auto collect changelog'
 description: 'Auto collect changelog'
 inputs:
@@ -55,7 +64,7 @@ runs:
         echo "SRG_PR_CONTENT_TXT=pr_and_branch_info.txt" >> $GITHUB_ENV
         echo "SRG_TEMP_FILE=temp.txt" >> $GITHUB_ENV
         echo "SRG_COMMITS_FILE=commits.txt" >> $GITHUB_ENV
-        echo "SRG_CHANGLOG_FILE=changelog.txt" >> $GITHUB_ENV
+        echo "SRG_CHANGLOG_FILE=changelog.md" >> $GITHUB_ENV
       shell: bash
 
     - run: |
