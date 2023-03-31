@@ -14,16 +14,16 @@ on:
 jobs:
   hello_world_job:
     runs-on: [ ubuntu-latest ]
-    name: A job to say hello
+    name: "Test SrgGactionChangelogApp"
     steps:
-      - uses: actions/checkout@v3
-      - id: foo
+      - id: collect_jira_tickets_in_pr
+        if: ${{ github.event.pull_request.merged }} == true
         uses: SweetRainGarden/SrgGactionChangelogApp@develop
         with:
           jira_domain: 'xxx.atlassian.net'
           gh_token: "${{ secrets.ORG_SECRET_CI_TOKEN }}"
       - run: | 
-          echo random-number ${{ steps.foo.outputs.jira_ticket_list }}
+          echo random-number ${{ steps.collect_jira_tickets_in_pr.outputs.jira_ticket_list }}
           echo "PR_STATE env: ---> ${{ env.PR_STATE }}"
           echo "BASH_ENV env: ---> ${{ env.BASH_ENV }}"
         shell: bash
