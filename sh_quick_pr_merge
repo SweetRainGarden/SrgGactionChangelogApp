@@ -88,8 +88,8 @@ for machine_name in {"","","ubuntu-latest",""}; do
   if [[ -z "${msg}" ]]; then
     pr_link=$(gh pr create --base "$start_branch" --title "run on ${machine}, ${current_time}" --body "Merge PR by script")
   else
-    pr_link=$(gh pr create --base "
-    $start_branch" --title "$msg" --body "Merge PR by script")
+    pr_link=$(gh pr create --base "$start_branch" --title "$msg" --body "Merge PR by script")
+
   fi
 
   sleep 3
