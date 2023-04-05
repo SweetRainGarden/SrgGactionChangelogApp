@@ -42,12 +42,13 @@ runs:
     - run: pwd
       shell: bash
 
-    - run: |
+    - name: "ZZZ -> Figure out Rnv --> 0: Pr event type"
+      run: |
         echo "github event action: ${{github.event.action}}"
-        if [[ "${{github.event.pull_request.merged}}" == true && "${{github.event.action}}" == closed ]]; then
+        if [[ "${{ github.event_name }}" == 'pull_request' && "${{github.event.pull_request.merged}}" == true && "${{github.event.action}}" == closed ]]; then
           echo "----------------------------> PR merged and closed. <----------------------------"
           echo "PR_STATE=CLOSED_AND_MERGED" >> $GITHUB_ENV
-        elif [[ "${{github.event.pull_request.merged}}" == false && "${{github.event.action}}" == closed ]]; then
+        elif [[ "${{ github.event_name }}" == 'pull_request' && "${{github.event.pull_request.merged}}" == false && "${{github.event.action}}" == closed ]]; then
           echo "----------------------------> PR closed without merging, do nothing. <----------------------------"
           echo "PR_STATE=CLOSED_BUT_NOT_MERGED" >> $GITHUB_ENV
         else
@@ -95,9 +96,11 @@ runs:
         else
           echo "Pull request was not merged, unable to retrieve commits."
         fi
+      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == 'true' }}
       shell: bash
 
     - name: "GGG -> init env --> 2: write PR info in file: ${{ env.SRG_PR_CONTENT_TXT }}"
+      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == 'true' }}
       uses: DamianReeves/write-file-action@master
       with:
         path: "./${{ env.SRG_PR_CONTENT_TXT }}"
@@ -108,6 +111,7 @@ runs:
         write-mode: overwrite
 
     - name: "extract jira ticket from pr and commits"
+      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == 'true' }}
       id: export_outputs_step
       run: |
         pwd
