@@ -153,5 +153,5 @@ runs:
         rm -f "${{ env.SRG_PR_CONTENT_TXT }}"
         rm -f "${{ env.SRG_TEMP_FILE }}"
         rm -f "${{ env.SRG_COMMITS_FILE }}"
-      shell: bash
       if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == 'true' }}
+      shell: bash
