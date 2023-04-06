@@ -150,6 +150,8 @@ runs:
         echo "ZZZ -> Clean up --> 0: txt files"
         echo ""
         echo "if if if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == 'true' }}"
+        echo "if if if: ${{ github.event.action == 'closed' && github.event.pull_request.merged == 'true' }}"
+        echo "if if if: ${{ github.event.pull_request.merged == 'true' }}"
         echo "------------- pull_request closed and merged ------------"
         rm -f "${{ env.SRG_PR_CONTENT_TXT }}"
         rm -f "${{ env.SRG_TEMP_FILE }}"
