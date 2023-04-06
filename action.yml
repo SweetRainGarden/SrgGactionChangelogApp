@@ -43,14 +43,14 @@ runs:
       shell: bash
 
     - run: |
-        echo name: "AAA -> Figure out Rnv --> 0: Pr event type"
+        echo name: "AAA -> Figure out env --> 0: Pr event type"
         echo ""
 
         echo "github event action: ${{github.event.action}}"
-        if [[ "${{ github.event_name }}" == 'pull_request' && "${{github.event.pull_request.merged}}" == true && "${{github.event.action}}" == closed ]]; then
+        if [[ "${{ github.event_name }}" == 'pull_request' && "${{github.event.pull_request.merged}}" == 'true' && "${{github.event.action}}" == 'closed' ]]; then
           echo "----------------------------> PR merged and closed. <----------------------------"
           echo "PR_STATE=CLOSED_AND_MERGED" >> $GITHUB_ENV
-        elif [[ "${{ github.event_name }}" == 'pull_request' && "${{github.event.pull_request.merged}}" == false && "${{github.event.action}}" == closed ]]; then
+        elif [[ "${{ github.event_name }}" == 'pull_request' && "${{github.event.pull_request.merged}}" == 'false' && "${{github.event.action}}" == 'closed' ]]; then
           echo "----------------------------> PR closed without merging, do nothing. <----------------------------"
           echo "PR_STATE=CLOSED_BUT_NOT_MERGED" >> $GITHUB_ENV
         else
