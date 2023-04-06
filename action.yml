@@ -123,6 +123,17 @@ runs:
         echo "srg_test_output=Hello_output_gaction" >> $GITHUB_OUTPUT
       shell: bash
 
+    - name: "WWW -> Cat Files --> 0: txt files"
+      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == 'true' }}
+      run: |
+        echo "------------- pull_request closed and merged ------------"
+        cat "${{ env.SRG_PR_CONTENT_TXT }}"
+        echo "--------------------------------------"
+        cat "${{ env.SRG_TEMP_FILE }}"
+        echo "--------------------------------------"
+        cat "${{ env.SRG_COMMITS_FILE }}"
+        echo "--------------------------------------"
+      shell: bash
     - name: "ZZZ -> Clean up --> 0: txt files"
       if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == 'true' }}
       run: |
