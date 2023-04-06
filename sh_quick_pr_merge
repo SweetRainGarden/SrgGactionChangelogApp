@@ -85,7 +85,7 @@ for machine_name in {"","","ubuntu-latest",""}; do
 
 
 
-#feat|fix|ci|chore|docs
+#feat|fix|ci|chore|docs|test|new_api|break_api|deprecate_api
 
   git push origin "${test_branch}"
   sleep 1
