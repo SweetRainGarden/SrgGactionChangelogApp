@@ -24,6 +24,9 @@ fi
 
 cd "$repo_dir_path" || return
 
+ticket_id_1="wit-65"
+ticket_id_2="wma-3456"
+ticket_id_3="owl-32324"
 
 # for machine_name in {"mobile_app_machine","mobile_app_machine_1","mobile_app_machine_2","mobile_app_machine_3","mobile_app_machine_5","mobile_app_machine_6","mobile_app_machine_7","mobile_app_machine_8"}; do
 for machine_name in {"","","ubuntu-latest",""}; do
@@ -67,28 +70,29 @@ for machine_name in {"","","ubuntu-latest",""}; do
     touch "$ci_trigger_txt"
     echo "${branch_name} -> ${current_time}" >>"$ci_trigger_txt"
     git add "$ci_trigger_txt"
-    git commit -m "commit only for test_ci_change: ${machine}, ${current_time} "
+    git commit -m "commit only for test_ci_change: ${machine}, ${current_time} wit-12346"
   else
     echo "has local file changes, add it and commit it"
     echo "${branch_name} -> ${current_time}" >>"$ci_trigger_txt"
     git add .
     if [[ -z "${msg}" ]]; then
       echo "empty msg string"
-      git commit -m "auto commit mes : ${machine}, ${current_time}"
+      git commit -m "ci: auto commit mes : ${machine}, ${current_time}"
     else
-      git commit -m "$msg"
+      git commit -m "chore: $msg"
     fi
   fi
 
 
 
+#feat|fix|ci|chore|docs
 
   git push origin "${test_branch}"
   sleep 1
   if [[ -z "${msg}" ]]; then
-    pr_link=$(gh pr create --base "$start_branch" --title "run on ${machine}, ${current_time}" --body "Merge PR by script")
+    pr_link=$(gh pr create --base "$start_branch" --title "run on ${machine}, ${current_time}" --body "fix: Merge PR by script: $ticket_id_1")
   else
-    pr_link=$(gh pr create --base "$start_branch" --title "$msg" --body "Merge PR by script")
+    pr_link=$(gh pr create --base "$start_branch" --title "$msg $ticket_id_2" --body "feat: Merge PR by script $ticket_id_3")
   fi
 
   sleep 3
@@ -118,7 +122,7 @@ for machine_name in {"","","ubuntu-latest",""}; do
     fi
 
     git add README.md
-    git commit -m "add diff link for commit: $commit_id"
+    git commit -m "docs: add diff link for commit: $commit_id"
     git push
   fi
 
