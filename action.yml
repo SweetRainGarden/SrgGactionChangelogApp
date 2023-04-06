@@ -106,10 +106,10 @@ runs:
         else
           echo "Pull request was not merged, unable to retrieve commits."
         fi
-      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == 'true' }}
+      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
       shell: bash
 
-    - if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == 'true' }}
+    - if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
       uses: DamianReeves/write-file-action@master
       with:
         path: "./${{ env.SRG_PR_CONTENT_TXT }}"
@@ -119,7 +119,7 @@ runs:
           "${{ github.event.pull_request.body }}"
         write-mode: overwrite
 
-    - if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == 'true' }}
+    - if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
       id: export_outputs_step
       run: |
         echo "extract jira ticket from pr and commits"
@@ -145,13 +145,13 @@ runs:
         cat "${{ env.SRG_COMMITS_FILE }}"
         echo "--------------------------------------"
       shell: bash
-      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == 'true' }}
+      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
     - run: |
         echo "ZZZ -> Clean up --> 0: txt files"
         echo ""
         echo "if if if: ${{ github.event_name == 'pull_request' }}"
         echo "if if if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' }}"
-        echo "if if if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == 'true' }}"
+        echo "if if if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}"
         echo "if if if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}"
 
 
