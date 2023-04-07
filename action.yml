@@ -101,7 +101,7 @@ runs:
           cat "./${{ env.SRG_TEMP_FILE}}"
           echo "---------------------------------------------"
           cat "./${{ env.SRG_TEMP_FILE}}" | jq -r '.[] | "\(.commit.message)"' > "./${{ env.SRG_COMMITS_FILE }}"
-          echo "" > "./${{ env.SRG_COMMITS_FILE }}"
+          echo "" >> "./${{ env.SRG_COMMITS_FILE }}"
           cat "./${{ env.SRG_COMMITS_FILE }}"
 
         else
