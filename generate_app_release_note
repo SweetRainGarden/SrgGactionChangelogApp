@@ -118,6 +118,7 @@ while IFS= read -r ticket_id; do
 	fi
 
 done <"$release_note_abs_path/$release_note_temp_ticket"
+
 current_time=$(date +%F_%H-%M-%S)
 
 echo "# Changelog: ${current_time}" >"$release_note_abs_path/$release_note"
