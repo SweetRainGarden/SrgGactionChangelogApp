@@ -140,15 +140,16 @@ runs:
         pattern_commit_convention="feat|fix|ci|chore|docs"
         pattern_jira_tickets="([a-z]{2,}-)([0-9]+)"
 
+        echo "------------------ cat ${{ env.SRG_COMMITS_FILE }} --------------------"
+        cat "${{ env.SRG_COMMITS_FILE }}"
+
         echo "------------------ extract commit message --------------------"
         cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -i -E "(${pattern_commit_convention}):" | sort -u | sort -n |sed -e 's/([^()]*)//g' 
         cat "${{ env.SRG_COMMITS_FILE }}" | grep -i -E "(${pattern_commit_convention}):" | sort -u | sort -n |sed -e 's/([^()]*)//g' 
 
         echo "------------------ extract jira ticket --------------------"
         cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -Eo "${pattern_jira_tickets}" | sort -u | sort -n 
-
-        echo "------------------ cat ${{ env.SRG_COMMITS_FILE }} --------------------"
-        cat "${{ env.SRG_COMMITS_FILE }}"
+      
         cat "${{ env.SRG_COMMITS_FILE }}" | grep -Eo "${pattern_jira_tickets}" | sort -u | sort -n 
 
       shell: bash
