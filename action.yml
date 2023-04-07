@@ -175,6 +175,7 @@ runs:
           if (($ticket_length >= $min_ticket_length)); then
             ticket_link="https://${{ inputs.jira_domain }}/browse/${ticket_id}"
             ticket_link_sed_form="${link_prefix_sed_form_1}${{ inputs.jira_domain }}${link_prefix_sed_form_2}${ticket_id}"
+            echo "ticket_link_sed_form:$ticket_link_sed_form"
             echo "- [$ticket_id](${ticket_link})" >>"${{ env.SRG_OUTPUT_CHANGLOG_FILE }}"
 
             if [ "$RUNNER_OS" == "Linux" ]; then
