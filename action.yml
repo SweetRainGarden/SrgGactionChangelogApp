@@ -138,7 +138,7 @@ runs:
         echo ""
 
         echo "------------- pull_request closed and merged ------------"
-        cat "${{ env.SRG_PR_CONTENT_TXT }}/n"
+        cat "${{ env.SRG_PR_CONTENT_TXT }}\n"
 
         #extract description by grep feat|fix|ci|chore|docs|merge from release_note_log
         echo "--------------------------------------"
