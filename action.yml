@@ -152,6 +152,12 @@ runs:
 
         echo "--------------------------------------"
         echo "--------------------------------------"
+        #extract ticket from release_note_log by grep ([a-z]{2,}-)([0-9]+)
+        cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -Eo '([a-z]{2,}-)([0-9]+)' | sort -u | sort -n 
+
+
+        echo "--------------------------------------"
+        echo "--------------------------------------"
         cat "${{ env.SRG_COMMITS_FILE }}"
         echo "--------------------------------------"
       shell: bash
