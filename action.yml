@@ -68,10 +68,10 @@ runs:
     - run: |
         echo "AAA -> Init env --> 1: Init file name into GITHUB_ENV"
         echo ""
-        echo "SRG_PR_CONTENT_TXT=pr_and_branch_info.txt" >> $GITHUB_ENV
-        echo "SRG_TEMP_FILE=temp.txt" >> $GITHUB_ENV
-        echo "SRG_COMMITS_FILE=commits.txt" >> $GITHUB_ENV
-        echo "SRG_CHANGLOG_FILE=changelog.md" >> $GITHUB_ENV
+        echo "SRG_PR_CONTENT_TXT=srg_temp_pr_and_branch_info.txt" >> $GITHUB_ENV
+        echo "SRG_TEMP_FILE=srg_temp.txt" >> $GITHUB_ENV
+        echo "SRG_COMMITS_FILE=srg_temp_commits.txt" >> $GITHUB_ENV
+        echo "SRG_CHANGLOG_FILE=srg_output_changelog.md" >> $GITHUB_ENV
       shell: bash
 
     - run: |
