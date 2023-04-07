@@ -117,7 +117,7 @@ runs:
           "${{ github.head_ref }}"
           "${{ github.event.pull_request.title }}"
           "${{ github.event.pull_request.body }}"
-          "\n"
+          ""
         write-mode: overwrite
 
     - if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
@@ -142,9 +142,10 @@ runs:
         cat "${{ env.SRG_PR_CONTENT_TXT }}"
 
         #extract description by grep feat|fix|ci|chore|docs|merge from release_note_log
+        echo "--------------------------------------"
+        echo "--------------------------------------"
         cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -i -E "(feat|fix|ci|chore|docs):" | cut -d '-' -f2- | sort -u | sort -n |sed -e 's/([^()]*)//g' 
 
-        echo "--------------------------------------"
         echo "--------------------------------------"
         echo "--------------------------------------"
         echo "--------------------------------------"
