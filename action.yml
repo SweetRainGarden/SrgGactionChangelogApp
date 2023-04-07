@@ -168,8 +168,14 @@ runs:
         echo ""
         pwd="$(pwd)"
         echo "${pwd}/${{ env.SRG_OUTPUT_CHANGLOG_FILE }}"
+        cat "${pwd}/${{ env.SRG_OUTPUT_CHANGLOG_FILE }}"
+        echo "-----------------------------------------------------"
         echo "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}"
-        echo "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}"
+        cat "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}"
+        echo "-----------------------------------------------------"
+        echo "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}"
+        cat "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}"
+        echo "-----------------------------------------------------"
       shell: bash
     - run: |
         echo "ZZZ -> Clean up --> 0: txt files"
