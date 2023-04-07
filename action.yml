@@ -100,7 +100,7 @@ runs:
 
           cat "./${{ env.SRG_TEMP_FILE}}"
           echo "---------------------------------------------"
-          cat "./${{ env.SRG_TEMP_FILE}}" | jq -r '.[] | "\(.sha) - \(.commit.message)"' > "./${{ env.SRG_COMMITS_FILE }}"
+          cat "./${{ env.SRG_TEMP_FILE}}" | jq -r '.[] | "\(.commit.message)"' > "./${{ env.SRG_COMMITS_FILE }}"
           cat "./${{ env.SRG_COMMITS_FILE }}"
 
         else
@@ -144,10 +144,10 @@ runs:
         #extract description by grep feat|fix|ci|chore|docs|merge from release_note_log
         echo "--------------------------------------"
         echo "--------------------------------------"
-        cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -i -E "(feat|fix|ci|chore|docs):" | cut -d '-' -f2- | sort -u | sort -n |sed -e 's/([^()]*)//g' 
+        cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -i -E "(feat|fix|ci|chore|docs):" | sort -u | sort -n |sed -e 's/([^()]*)//g' 
         echo "--------------------------------------"
         echo "--------------------------------------"
-        cat "${{ env.SRG_COMMITS_FILE }}" | grep -i -E "(feat|fix|ci|chore|docs):" | cut -d '-' -f2- | sort -u | sort -n |sed -e 's/([^()]*)//g' 
+        cat "${{ env.SRG_COMMITS_FILE }}" | grep -i -E "(feat|fix|ci|chore|docs):" | sort -u | sort -n |sed -e 's/([^()]*)//g' 
 
 
         echo "--------------------------------------"
