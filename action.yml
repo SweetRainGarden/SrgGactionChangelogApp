@@ -164,6 +164,14 @@ runs:
       shell: bash
       if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
     - run: |
+        echo "XXX -> Echo --> 0: txt files"
+        echo ""
+        pwd="$(pwd)"
+        echo "${pwd}/${{ env.SRG_PR_CONTENT_TXT }}"
+        echo "${pwd}/${{ env.SRG_TEMP_FILE }}"
+        echo "${pwd}/${{ env.SRG_COMMITS_FILE }}"
+      shell: bash
+    - run: |
         echo "ZZZ -> Clean up --> 0: txt files"
         echo ""
         echo "------------- pull_request closed and merged ------------"
