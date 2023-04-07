@@ -145,8 +145,8 @@ runs:
         cat "${{ env.SRG_COMMITS_FILE }}" | grep -i -E "(${pattern_commit_convention}):" | sort -u | sort -n |sed -e 's/([^()]*)//g' 
 
         echo "------------------ extract jira ticket --------------------"
-        # cat "${{ env.SRG_COMMITS_FILE }}" | grep -Eo "${pattern_jira_tickets}" | sort -u | sort -n 
         cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -Eo "${pattern_jira_tickets}" | sort -u | sort -n 
+        cat "${{ env.SRG_COMMITS_FILE }}" | grep -Eo "${pattern_jira_tickets}" | sort -u | sort -n 
 
       shell: bash
       if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
