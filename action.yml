@@ -114,10 +114,9 @@ runs:
       with:
         path: "./${{ env.SRG_PR_CONTENT_TXT }}"
         contents: |
-          "${{ github.head_ref }}"
-          "${{ github.event.pull_request.title }}"
-          "${{ github.event.pull_request.body }}"
-          ""
+          ${{ github.head_ref }}
+          ${{ github.event.pull_request.title }}
+          ${{ github.event.pull_request.body }}
         write-mode: overwrite
 
     - if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
