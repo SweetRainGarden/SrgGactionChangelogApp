@@ -148,7 +148,9 @@ runs:
         cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -i -E "(${pattern_commit_convention}):" | sort -u | sort -n |sed -e 's/([^()]*)//g' > "${{ env.SRG_OUTPUT_COMMITS_FILE }}" 
         cat "${{ env.SRG_COMMITS_FILE }}" | grep -i -E "(${pattern_commit_convention}):" | sort -u | sort -n |sed -e 's/([^()]*)//g' >> "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
         cat "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
+        echo "uuuuuuuuuuuuuu"
         cat "${{ env.SRG_OUTPUT_COMMITS_FILE }}"| sort -u | sort -n > "${{ env.SRG_OUTPUT_COMMITS_FILE }}" 
+        cat "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
 
 
         echo "------------------ extract jira ticket --------------------"
@@ -156,6 +158,8 @@ runs:
         cat "${{ env.SRG_COMMITS_FILE }}" | grep -Eo "${pattern_jira_tickets}" | sort -u | sort -n >> "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
         cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
         cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}"| sort -u | sort -n > "${{ env.SRG_OUTPUT_TICKETS_FILE }}" 
+        echo "uuuuuuuuuuuuuu"
+        cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
 
       shell: bash
       if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
