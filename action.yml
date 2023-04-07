@@ -179,7 +179,7 @@ runs:
             echo "- [$ticket_id](${ticket_link})" >>"${{ env.SRG_OUTPUT_CHANGLOG_FILE }}"
 
             if [ "$RUNNER_OS" == "Linux" ]; then
-              sed -i "s/$ticket_id/[${ticket_id}]($ticket_link_sed_form)/g" "${{ env.SRG_COMMITS_FILE }}"
+              sed -i "s/$ticket_id/[${ticket_id}]/g" "${{ env.SRG_COMMITS_FILE }}"
             elif [ "$RUNNER_OS" == "macOS" ]; then
               sed -i '' "s/$ticket_id/[${ticket_id}]($ticket_link_sed_form)/g" "${{ env.SRG_COMMITS_FILE }}"
             else
