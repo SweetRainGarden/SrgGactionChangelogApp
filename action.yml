@@ -140,6 +140,10 @@ runs:
 
         echo "------------- pull_request closed and merged ------------"
         cat "${{ env.SRG_PR_CONTENT_TXT }}"
+
+        #extract description by grep feat|fix|ci|chore|docs|merge from release_note_log
+        cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -i -E "(feat|fix|ci|chore|docs):" | cut -d '-' -f2- | sort -u | sort -n |sed -e 's/([^()]*)//g' 
+
         echo "--------------------------------------"
         echo "--------------------------------------"
         echo "--------------------------------------"
