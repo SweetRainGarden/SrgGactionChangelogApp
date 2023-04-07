@@ -138,6 +138,7 @@ runs:
         echo "WWW -> Cat Files --> 0: txt files"
         echo ""
         commit_convention_pattern="feat|fix|ci|chore|docs"
+        pattern_jira_tickets="([a-z]{2,}-)([0-9]+)"
 
         #extract description by grep feat|fix|ci|chore|docs|merge from release_note_log
         echo "--------------------------------------"
@@ -151,7 +152,7 @@ runs:
         echo "--------------------------------------"
         echo "--------------------------------------"
         #extract ticket from release_note_log by grep ([a-z]{2,}-)([0-9]+)
-        cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -Eo '([a-z]{2,}-)([0-9]+)' | sort -u | sort -n 
+        cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -Eo "$pattern_jira_tickets" | sort -u | sort -n 
 
       shell: bash
       if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
