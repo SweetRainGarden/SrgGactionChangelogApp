@@ -152,11 +152,9 @@ runs:
         cat "${{ env.SRG_OUTPUT_COMMITS_FILE }}" | sort -u | sort -n > temp.txt && mv temp.txt ${{ env.SRG_OUTPUT_COMMITS_FILE }}
         cat "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
 
-
-
         echo "------------------ extract jira ticket --------------------"
-        cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -Eo "${pattern_jira_tickets}" | sort -u | sort -n > "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
-        cat "${{ env.SRG_COMMITS_FILE }}" | grep -Eo "${pattern_jira_tickets}" | sort -u | sort -n >> "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
+        cat "${{ env.SRG_PR_CONTENT_TXT }}" "${{ env.SRG_COMMITS_FILE }}" | grep -Eo "${pattern_jira_tickets}" | sort -u | sort -n > "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
+        # cat "${{ env.SRG_COMMITS_FILE }}" | grep -Eo "${pattern_jira_tickets}" | sort -u | sort -n >> "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
         cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
         echo "uuuuuuuuuuuuuu"
         cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}" | sort -u | sort -n > temp.txt && mv temp.txt ${{ env.SRG_OUTPUT_TICKETS_FILE }}
