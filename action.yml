@@ -146,6 +146,9 @@ runs:
 
         echo "------------------ extract jira ticket --------------------"
         cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -Eo "${pattern_jira_tickets}" | sort -u | sort -n 
+
+        echo "------------------ cat ${{ env.SRG_COMMITS_FILE }} --------------------"
+        cat "${{ env.SRG_COMMITS_FILE }}"
         cat "${{ env.SRG_COMMITS_FILE }}" | grep -Eo "${pattern_jira_tickets}" | sort -u | sort -n 
 
       shell: bash
