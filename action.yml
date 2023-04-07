@@ -160,6 +160,34 @@ runs:
         cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}" | sort -u | sort -n > temp.txt && mv temp.txt ${{ env.SRG_OUTPUT_TICKETS_FILE }}
         cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
 
+      shell: bash
+      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
+    - run: |
+        echo "WWW -> Changelog --> figure out changelog"
+        echo ""
+
+        link_prefix_sed_form_1="https:\/\/"
+        link_prefix_sed_form_2="\/browse\/"
+
+        while IFS= read -r ticket_id; do
+          min_ticket_length=5
+          ticket_length=${#ticket_id}
+          if (($ticket_length >= $min_ticket_length)); then
+            ticket_link="https://${{ inputs.jira_domain }}/browse/${ticket_id}"
+            ticket_link_sed_form="${link_prefix_sed_form_1}${{ inputs.jira_domain }}${link_prefix_sed_form_2}${ticket_id}"
+            echo "- [$ticket_id](${ticket_link})" >>"${{ env.SRG_OUTPUT_CHANGLOG_FILE }}"
+
+            if [ "$RUNNER_OS" == "Linux" ]; then
+              sed -i "s/$ticket_id/[${ticket_id}]($ticket_link_sed_form)/g" "${{ env.SRG_COMMITS_FILE }}"
+            elif [ "$RUNNER_OS" == "macOS" ]; then
+              sed -i '' "s/$ticket_id/[${ticket_id}]($ticket_link_sed_form)/g" "${{ env.SRG_COMMITS_FILE }}"
+            else
+              echo "\$RUNNER_OS is not supported"
+              exit 1
+            fi
+          fi
+        done <"${{ env.SRG_OUTPUT_TICKETS_FILE }}"
+        
 
       shell: bash
       if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
@@ -177,6 +205,8 @@ runs:
         cat "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}"
         echo "-----------------------------------------------------"
       shell: bash
+      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
+
     - run: |
         echo "ZZZ -> Clean up --> 0: txt files"
         echo ""
@@ -185,3 +215,4 @@ runs:
         rm -f "${{ env.SRG_TEMP_FILE }}"
         rm -f "${{ env.SRG_COMMITS_FILE }}"
       shell: bash
+      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
