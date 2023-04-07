@@ -167,9 +167,9 @@ runs:
         echo "XXX -> Echo --> 0: txt files"
         echo ""
         pwd="$(pwd)"
-        echo "${pwd}/${{ env.SRG_PR_CONTENT_TXT }}"
-        echo "${pwd}/${{ env.SRG_TEMP_FILE }}"
-        echo "${pwd}/${{ env.SRG_COMMITS_FILE }}"
+        echo "${pwd}/${{ env.SRG_OUTPUT_CHANGLOG_FILE }}"
+        echo "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}"
+        echo "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}"
       shell: bash
     - run: |
         echo "ZZZ -> Clean up --> 0: txt files"
