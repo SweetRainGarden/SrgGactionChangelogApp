@@ -137,18 +137,15 @@ runs:
     - run: |
         echo "WWW -> Cat Files --> 0: txt files"
         echo ""
-
-        echo "------------- pull_request closed and merged ------------"
-        cat "${{ env.SRG_PR_CONTENT_TXT }}"
-        echo ""
+        commit_convention_pattern="feat|fix|ci|chore|docs"
 
         #extract description by grep feat|fix|ci|chore|docs|merge from release_note_log
         echo "--------------------------------------"
         echo "--------------------------------------"
-        cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -i -E "(feat|fix|ci|chore|docs):" | sort -u | sort -n |sed -e 's/([^()]*)//g' 
+        cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -i -E "(${commit_convention_pattern}):" | sort -u | sort -n |sed -e 's/([^()]*)//g' 
         echo "--------------------------------------"
         echo "--------------------------------------"
-        cat "${{ env.SRG_COMMITS_FILE }}" | grep -i -E "(feat|fix|ci|chore|docs):" | sort -u | sort -n |sed -e 's/([^()]*)//g' 
+        cat "${{ env.SRG_COMMITS_FILE }}" | grep -i -E "(${commit_convention_pattern}):" | sort -u | sort -n |sed -e 's/([^()]*)//g' 
 
 
         echo "--------------------------------------"
@@ -156,11 +153,6 @@ runs:
         #extract ticket from release_note_log by grep ([a-z]{2,}-)([0-9]+)
         cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -Eo '([a-z]{2,}-)([0-9]+)' | sort -u | sort -n 
 
-
-        echo "--------------------------------------"
-        echo "--------------------------------------"
-        cat "${{ env.SRG_COMMITS_FILE }}"
-        echo "--------------------------------------"
       shell: bash
       if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
     - run: |
