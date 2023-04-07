@@ -71,7 +71,9 @@ runs:
         echo "SRG_PR_CONTENT_TXT=srg_temp_pr_and_branch_info.txt" >> $GITHUB_ENV
         echo "SRG_TEMP_FILE=srg_temp.txt" >> $GITHUB_ENV
         echo "SRG_COMMITS_FILE=srg_temp_commits.txt" >> $GITHUB_ENV
-        echo "SRG_CHANGLOG_FILE=srg_output_changelog.md" >> $GITHUB_ENV
+        echo "SRG_OUTPUT_CHANGLOG_FILE=srg_output_changelog.md" >> $GITHUB_ENV
+        echo "SRG_OUTPUT_TICKETS_FILE=srg_output_tickets.txt" >> $GITHUB_ENV
+        echo "SRG_OUTPUT_COMMITS_FILE=srg_output_commits.txt" >> $GITHUB_ENV
       shell: bash
 
     - run: |
@@ -127,7 +129,7 @@ runs:
         pwd
         pwd=$(pwd)
         echo "pwd -> $pwd"
-        srg_changelog_abs_path="$(pwd)/${{ env.SRG_CHANGLOG_FILE }}"
+        srg_changelog_abs_path="$(pwd)/${{ env.SRG_OUTPUT_CHANGLOG_FILE }}"
         echo "jira_ticket_list=$(echo abc-$RANDOM)" >> $GITHUB_OUTPUT
         echo "srg_changelog_file=$srg_changelog_abs_path" >> $GITHUB_OUTPUT
         echo "srg_test_output=Hello_output_gaction" >> $GITHUB_OUTPUT
@@ -143,13 +145,14 @@ runs:
         cat "${{ env.SRG_COMMITS_FILE }}"
 
         echo "------------------ extract commit message --------------------"
-        cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -i -E "(${pattern_commit_convention}):" | sort -u | sort -n |sed -e 's/([^()]*)//g' 
-        cat "${{ env.SRG_COMMITS_FILE }}" | grep -i -E "(${pattern_commit_convention}):" | sort -u | sort -n |sed -e 's/([^()]*)//g' 
-
+        cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -i -E "(${pattern_commit_convention}):" | sort -u | sort -n |sed -e 's/([^()]*)//g'>"${{ env.SRG_OUTPUT_TICKETS_FILE }}" 
+        cat "${{ env.SRG_COMMITS_FILE }}" | grep -i -E "(${pattern_commit_convention}):" | sort -u | sort -n |sed -e 's/([^()]*)//g' >> "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
+        cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
         echo "------------------ extract jira ticket --------------------"
-        cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -Eo "${pattern_jira_tickets}" | sort -u | sort -n 
-      
-        cat "${{ env.SRG_COMMITS_FILE }}" | grep -Eo "${pattern_jira_tickets}" | sort -u | sort -n 
+
+        cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -Eo "${pattern_jira_tickets}" | sort -u | sort -n > "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
+        cat "${{ env.SRG_COMMITS_FILE }}" | grep -Eo "${pattern_jira_tickets}" | sort -u | sort -n >>"${{ env.SRG_OUTPUT_COMMITS_FILE }}"
+        cat "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
 
       shell: bash
       if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
