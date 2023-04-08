@@ -19,6 +19,8 @@ jobs:
         with:
           jira_domain: 'xxx.atlassian.net'
           gh_token: "${{ secrets.ORG_SECRET_CI_TOKEN }}"
+          google_sheet_token: "1B95QAymjwitZotDcwQrQISoA7sYXmSe0thoUupQ48e4"
+          google_sheet_id: "1B95QAymjwitZotDcwQrQISoA7sYXmSe0thoUupQ48e4"
       
       - name: "Print outputs from SrgGactionChangelogApp"
         run: | 
