@@ -20,6 +20,10 @@ inputs:
   gh_token:
     description: 'A Github token with read permission for repos'
     required: true
+  pattern_commit_convention:
+    required: false
+    default: "feat|fix|ci|chore|docs"
+    description: 'The commit message convention pattern'
 outputs:
   jira_ticket_list:
     description: "The jira tickets list form pull request and commit message"
@@ -141,7 +145,7 @@ runs:
     - run: |
         echo "WWW -> Cat Files --> 0: txt files"
         echo ""
-        pattern_commit_convention="feat|fix|ci|chore|docs"
+        pattern_commit_convention="${{ inputs.pattern_commit_convention }}"
         pattern_jira_tickets="([a-z]{2,}-)([0-9]+)"
 
         echo "------------------ cat ${{ env.SRG_COMMITS_FILE }} --------------------"
