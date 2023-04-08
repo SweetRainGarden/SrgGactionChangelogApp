@@ -6,6 +6,9 @@
 # 3, append and inject the jira_domain into jira ticket of the step 2 in markdown format
 # 4, check if trigger keywords are in pull request title or body. (Optional)
 # Output: jira_tickets_list and absolute path of changelog.md 
+
+# add colums to google sheet: jira_tickets, commits
+# deal with the link in google sheet script for quick acess.
 # --------------------------------------------------------------------------------------------------
 name: 'Srg auto collect changelog'
 description: 'Auto collect changelog'
