@@ -24,6 +24,10 @@ inputs:
     required: false
     default: "feat|fix|ci|chore|docs"
     description: 'The commit message convention pattern'
+  pattern_jira_tickets:
+    required: false
+    default: "([a-z]{2,}-)([0-9]+)"
+    description: 'Regex for extract jira ticket'
 outputs:
   jira_ticket_list:
     description: "The jira tickets list form pull request and commit message"
@@ -146,7 +150,7 @@ runs:
         echo "WWW -> Cat Files --> 0: txt files"
         echo ""
         pattern_commit_convention="${{ inputs.pattern_commit_convention }}"
-        pattern_jira_tickets="([a-z]{2,}-)([0-9]+)"
+        pattern_jira_tickets="${{ inputs.pattern_jira_tickets }}"
 
         echo "------------------ cat ${{ env.SRG_COMMITS_FILE }} --------------------"
         cat "${{ env.SRG_COMMITS_FILE }}"
