@@ -34,6 +34,12 @@ inputs:
   google_sheet_id:
     required: true
     description: 'Gookge sheet id'
+  google_sheet_client_email:
+    required: true
+    description: 'Gookge sheet id'
+  google_sheet_work_sheet_title:
+    required: true
+    description: 'Work sheed tittle'
 outputs:
   jira_ticket_list:
     description: "The jira tickets list form pull request and commit message"
