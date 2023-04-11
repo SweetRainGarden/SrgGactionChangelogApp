@@ -222,6 +222,9 @@ runs:
         echo "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}"
         cat "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}"
         echo "-----------------------------------------------------"
+
+
+
       shell: bash
       if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
 
@@ -239,6 +242,13 @@ runs:
       run: |
         current_time=$(date +"%Y/%m/%d %H:%M:%S")
         echo "SRG_ACTION_TRIGGER_TIME=${current_time}" >> $GITHUB_ENV
+        
+        
+        ticket_list=$(cat "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}")
+        echo "SRG_ACTION_TICKET_LIST=${ticket_list}" >> $GITHUB_ENV
+        
+        commits_list=$(cat "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}")
+        echo "SRG_ACTION_COMMITS_LIST=${commits_list}" >> $GITHUB_ENV
       shell: bash
       if: ${{ github.event_name == 'pull_request' }}
 
@@ -265,7 +275,9 @@ runs:
                           "${{ github.event.pull_request.merged }}",
                           "${{ github.event.action }}",
                           "${{ github.actor }}",
-                          "${{ env.SRG_ACTION_TRIGGER_TIME }}"
+                          "${{ env.SRG_ACTION_TRIGGER_TIME }}",
+                          "${{ env.SRG_ACTION_COMMITS_LIST }}",
+                          "${{ env.SRG_ACTION_TICKET_LIST }}"
                       ]
                     ],
                   "minCol": 1,
