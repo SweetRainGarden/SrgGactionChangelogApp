@@ -81,6 +81,7 @@ runs:
         echo ""
         goodbye.sh
       shell: bash
+      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
 
     - run: |
         echo "AAA -> Init env --> 1: Init file name into GITHUB_ENV"
@@ -125,10 +126,10 @@ runs:
         else
           echo "Pull request was not merged, unable to retrieve commits."
         fi
-      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
+      if: ${{ github.event_name == 'pull_request' }}
       shell: bash
 
-    - if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
+    - if: ${{ github.event_name == 'pull_request' }}
       uses: DamianReeves/write-file-action@master
       with:
         path: "./${{ env.SRG_PR_CONTENT_TXT }}"
@@ -138,7 +139,7 @@ runs:
           ${{ github.event.pull_request.body }}
         write-mode: overwrite
 
-    - if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
+    - if: ${{ github.event_name == 'pull_request' }}
       id: export_outputs_step
       run: |
         echo "extract jira ticket from pr and commits"
@@ -178,7 +179,7 @@ runs:
         cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
 
       shell: bash
-      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
+      if: ${{ github.event_name == 'pull_request' }}
     - run: |
         echo "WWW -> Changelog --> figure out changelog"
         echo ""
@@ -208,7 +209,7 @@ runs:
         
 
       shell: bash
-      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
+      if: ${{ github.event_name == 'pull_request' }}
     - run: |
         echo "XXX -> Echo --> 0: txt files"
         echo ""
@@ -226,7 +227,7 @@ runs:
 
 
       shell: bash
-      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
+      if: ${{ github.event_name == 'pull_request' }}
 
     - run: |
         echo "ZZZ -> Clean up --> 0: txt files"
@@ -236,7 +237,7 @@ runs:
         rm -f "${{ env.SRG_TEMP_FILE }}"
         rm -f "${{ env.SRG_COMMITS_FILE }}"
       shell: bash
-      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
+      if: ${{ github.event_name == 'pull_request' }}
 
     - name: 'TTT -> Get action trigger time'
       run: |
