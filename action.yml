@@ -255,11 +255,14 @@ runs:
         echo "Beijing time: $beijing_time"
 
 
-
         pwd=$(pwd)
-        #ticket_list=$(cat "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}")
-        ticket_list=$(tr '\n' ' ' < "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}")
-        echo "SRG_ACTION_TICKET_LIST=${ticket_list}" >> $GITHUB_ENV
+        ticket_list=$(cat "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}")
+        # ticket_list=$(tr '\n' ' ' < "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}")
+        # echo "SRG_ACTION_TICKET_LIST=${ticket_list}" >> $GITHUB_ENV
+
+        echo "SRG_ACTION_TICKET_LIST<<EOF" >> $GITHUB_ENV
+        echo "$ticket_list" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
 
         commits_list=$(tr '\n' ' ' < "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}")
         #commits_list=$(cat "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}")
