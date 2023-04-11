@@ -162,8 +162,8 @@ runs:
         cat "${{ env.SRG_COMMITS_FILE }}"
 
         echo "------------------ extract commit message --------------------"
-        cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -i -E "(${pattern_commit_convention}):" | sort -u | sort -n |sed -e 's/([^()]*)//g' > "${{ env.SRG_OUTPUT_COMMITS_FILE }}" 
-        cat "${{ env.SRG_COMMITS_FILE }}" | grep -i -E "(${pattern_commit_convention}):" | sort -u | sort -n |sed -e 's/([^()]*)//g' >> "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
+        cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -i -E "(${pattern_commit_convention}):" | sort -u | sort -n |sed -e 's/([^()]*)//g' | sed 's/;/,/g' > "${{ env.SRG_OUTPUT_COMMITS_FILE }}" 
+        cat "${{ env.SRG_COMMITS_FILE }}" | grep -i -E "(${pattern_commit_convention}):" | sort -u | sort -n |sed -e 's/([^()]*)//g' | sed 's/;/,/g' >> "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
         cat "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
         echo "uuuuuuuuuuuuuu"
         cat "${{ env.SRG_OUTPUT_COMMITS_FILE }}" | sort -u | sort -n > temp.txt && mv temp.txt ${{ env.SRG_OUTPUT_COMMITS_FILE }}
@@ -257,14 +257,14 @@ runs:
 
         pwd=$(pwd)
         # ticket_list=$(cat "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}")
-        ticket_list=$(tr '\n' ';;;' < "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}")
+        ticket_list=$(tr '\n' ';' < "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}")
         echo "SRG_ACTION_TICKET_LIST=${ticket_list}" >> $GITHUB_ENV
 
         # echo "SRG_ACTION_TICKET_LIST<<EOF" >> $GITHUB_ENV
         # echo "$ticket_list" >> $GITHUB_ENV
         # echo "EOF" >> $GITHUB_ENV
 
-        commits_list=$(tr '\n' ';;;' < "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}")
+        commits_list=$(tr '\n' ';' < "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}")
         #commits_list=$(cat "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}")
         echo "SRG_ACTION_COMMITS_LIST=${commits_list}" >> $GITHUB_ENV
       shell: bash
