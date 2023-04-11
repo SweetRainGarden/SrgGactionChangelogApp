@@ -12,15 +12,18 @@ on:
 jobs:
   generate_changelog:
     runs-on: [ ubuntu-latest ]
-    name: "Test SrgGactionChangelogApp"
+    name: "Generate changelog from PR"
     steps:
       - id: collect_jira_tickets_in_pr
         uses: SweetRainGarden/SrgGactionChangelogApp@develop
         with:
           jira_domain: 'xxx.atlassian.net'
+
           gh_token: "${{ secrets.ORG_SECRET_CI_TOKEN }}"
-          google_sheet_token: "1B95QAymjwitZotDcwQrQISoA7sYXmSe0thoUupQ48e4"
+          google_sheet_token: "${{ secrets.ANDROID_CI_GSHEET_PRIVATE_KEY }}"
+          google_sheet_client_email: "${{ secrets.ANDROID_CI_GSHEET_CLIENT_EMAIL }}"
           google_sheet_id: "1B95QAymjwitZotDcwQrQISoA7sYXmSe0thoUupQ48e4"
+          google_sheet_work_sheet_title: "changelog_from_pr"
       
       - name: "Print outputs from SrgGactionChangelogApp"
         run: | 
