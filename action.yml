@@ -262,8 +262,8 @@ runs:
                           "=HYPERLINK(${{ env.DOUBLE_QUOTE }}${{ github.event.pull_request.html_url }}${{ env.DOUBLE_QUOTE }},${{ env.DOUBLE_QUOTE }}${{ github.event.number }}${{ env.DOUBLE_QUOTE }})",
                           "${{ github.base_ref }}",
                           "${{ github.head_ref }}",
-                          "${{github.event.pull_request.merged}}",
-                          "${{github.event.action}}",
+                          "${{ github.event.pull_request.merged }}",
+                          "${{ github.event.action }}",
                           "${{ github.actor }}",
                           "${{ env.SRG_ACTION_TRIGGER_TIME }}"
                       ]
@@ -275,6 +275,5 @@ runs:
           ]
       env:
         DOUBLE_QUOTE: '\"'
-
         GSHEET_CLIENT_EMAIL: ${{ inputs.google_sheet_client_email }}
         GSHEET_PRIVATE_KEY: ${{ inputs.google_sheet_token }}
