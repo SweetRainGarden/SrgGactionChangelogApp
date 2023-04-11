@@ -235,6 +235,10 @@ runs:
       shell: bash
       if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
 
+    - name: 'TTT -> Get action trigger time'
+      run: |
+        current_time=$(date +"%Y/%m/%d %H:%M:%S")
+        echo "SRG_ACTION_TRIGGER_TIME=${current_time}" >> $GITHUB_ENV
 
     - name: "TTT -> Update Google Sheet --> 1: append data"
       id: append_data_google_sheet
@@ -258,7 +262,7 @@ runs:
                           "${{github.event.pull_request.merged}}",
                           "${{github.event.action}}",
                           "${{ github.actor }}",
-                          "${{ env.ACTION_TRIGGER_TIME }}"
+                          "${{ env.SRG_ACTION_TRIGGER_TIME }}"
                       ]
                     ],
                   "minCol": 1,
@@ -268,6 +272,6 @@ runs:
           ]
       env:
         DOUBLE_QUOTE: '\"'
-        ACTION_TRIGGER_TIME: "$(date +'%Y/%m/%d %H:%M:%S')"
+
         GSHEET_CLIENT_EMAIL: ${{ inputs.google_sheet_client_email }}
         GSHEET_PRIVATE_KEY: ${{ inputs.google_sheet_token }}
