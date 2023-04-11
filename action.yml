@@ -240,9 +240,22 @@ runs:
 
     - name: 'TTT -> Get action trigger time'
       run: |
-        current_time=$(date +"%Y/%m/%d %H:%M:%S")
-        echo "SRG_ACTION_TRIGGER_TIME=${current_time}" >> $GITHUB_ENV
+
         
+        # Get the current date and time in Seattle time zone
+        seattle_time=$(TZ='America/Los_Angeles' date '+%m/%d/%Y %T')
+        echo "SRG_ACTION_TRIGGER_TIME_SEATTLE=${seattle_time}" >> $GITHUB_ENV
+
+        # Get the current date and time in Beijing time zone
+        beijing_time=$(TZ='Asia/Shanghai' date '+%m/%d/%Y %T')
+        echo "SRG_ACTION_TRIGGER_TIME_BEIJING=${beijing_time}" >> $GITHUB_ENV
+
+        # Print the results
+        echo "Seattle time: $seattle_time"
+        echo "Beijing time: $beijing_time"
+
+
+
         pwd=$(pwd)
         #ticket_list=$(cat "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}")
         ticket_list=$(tr '\n' ' ' < "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}")
@@ -277,7 +290,8 @@ runs:
                           "${{ github.event.pull_request.merged }}",
                           "${{ github.event.action }}",
                           "${{ github.actor }}",
-                          "${{ env.SRG_ACTION_TRIGGER_TIME }}",
+                          "${{ env.SRG_ACTION_TRIGGER_TIME_SEATTLE }}",
+                          "${{ env.SRG_ACTION_TRIGGER_TIME_BEIJING }}",
                           "${{ env.SRG_ACTION_COMMITS_LIST }}",
                           "${{ env.SRG_ACTION_TICKET_LIST }}"
                       ]
