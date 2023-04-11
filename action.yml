@@ -234,3 +234,38 @@ runs:
         rm -f "${{ env.SRG_COMMITS_FILE }}"
       shell: bash
       if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
+
+
+    - name: "TTT -> Update Google Sheet --> 1: append data"
+      id: append_data_google_sheet
+      uses: jroehl/gsheet.action@v1.2.0
+      with:
+        spreadsheetId: "${{inputs.google_sheet_id}}"
+        commands: | # list of commands, specified as a valid JSON string
+          [
+            {
+              "command": "appendData",
+              "args":
+                {
+                  "worksheetTitle": "${{ inputs.google_sheet_work_sheet_title }}",
+                  "data":
+                    [
+                      [
+                          "${{ github.event.repository.name }}",
+                          "=HYPERLINK(${{ env.DOUBLE_QUOTE }}${{ github.event.pull_request.html_url }}${{ env.DOUBLE_QUOTE }},${{ env.DOUBLE_QUOTE }}${{ github.event.number }}${{ env.DOUBLE_QUOTE }})",
+                          "${{ github.base_ref }}",
+                          "${{ github.head_ref }}",
+                          "${{github.event.pull_request.merged}}",
+                          "${{github.event.action}}",
+                          "${{ github.actor }}",
+                      ]
+                    ],
+                  "minCol": 1,
+                  "valueInputOption":"USER_ENTERED"
+                }
+            }
+          ]
+      env:
+        DOUBLE_QUOTE: '\"'
+        GSHEET_CLIENT_EMAIL: ${{ inputs.google_sheet_client_email }}
+        GSHEET_PRIVATE_KEY: ${{ inputs.google_sheet_token }}
