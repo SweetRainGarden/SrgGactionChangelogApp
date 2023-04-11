@@ -239,6 +239,9 @@ runs:
       run: |
         current_time=$(date +"%Y/%m/%d %H:%M:%S")
         echo "SRG_ACTION_TRIGGER_TIME=${current_time}" >> $GITHUB_ENV
+      shell: bash
+      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
+
 
     - name: "TTT -> Update Google Sheet --> 1: append data"
       id: append_data_google_sheet
