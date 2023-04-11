@@ -257,7 +257,7 @@ runs:
                           "${{ github.head_ref }}",
                           "${{github.event.pull_request.merged}}",
                           "${{github.event.action}}",
-                          "${{ github.actor }}",
+                          "${{ github.actor }}"
                       ]
                     ],
                   "minCol": 1,
