@@ -257,7 +257,8 @@ runs:
                           "${{ github.head_ref }}",
                           "${{github.event.pull_request.merged}}",
                           "${{github.event.action}}",
-                          "${{ github.actor }}"
+                          "${{ github.actor }}",
+                          "${{ env.ACTION_TRIGGER_TIME }}"
                       ]
                     ],
                   "minCol": 1,
@@ -267,5 +268,6 @@ runs:
           ]
       env:
         DOUBLE_QUOTE: '\"'
+        ACTION_TRIGGER_TIME: "$(date +'%Y/%m/%d %H:%M:%S')"
         GSHEET_CLIENT_EMAIL: ${{ inputs.google_sheet_client_email }}
         GSHEET_PRIVATE_KEY: ${{ inputs.google_sheet_token }}
