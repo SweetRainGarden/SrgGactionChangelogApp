@@ -111,21 +111,21 @@ runs:
         curl -s -H "Authorization: token ${{ inputs.gh_token }}" -H "Accept: application/vnd.github+json" $API_URL > "${{ env.SRG_TEMP_FILE}}"
 
         PR_MERGED="${{ github.event.pull_request.merged }}"
-        if [ "$PR_MERGED" = "true" ]; then
-          jq_installed=$(command -v jq)
-          if [ -z "$jq_installed" ]; then
-            echo "jq is not installed on the machie, exit..." 
-            exit 1
-          fi
-
-          cat "./${{ env.SRG_TEMP_FILE}}"
-          echo "---------------------------------------------"
-          cat "./${{ env.SRG_TEMP_FILE}}" | jq -r '.[] | "\(.commit.message)"' > "./${{ env.SRG_COMMITS_FILE }}"
-          cat "./${{ env.SRG_COMMITS_FILE }}"
-
-        else
-          echo "Pull request was not merged, unable to retrieve commits."
+        # if [ "$PR_MERGED" = "true" ]; then
+        jq_installed=$(command -v jq)
+        if [ -z "$jq_installed" ]; then
+          echo "jq is not installed on the machie, exit..." 
+          exit 1
         fi
+
+        cat "./${{ env.SRG_TEMP_FILE}}"
+        echo "---------------------------------------------"
+        cat "./${{ env.SRG_TEMP_FILE}}" | jq -r '.[] | "\(.commit.message)"' > "./${{ env.SRG_COMMITS_FILE }}"
+        cat "./${{ env.SRG_COMMITS_FILE }}"
+
+        # else
+        #   echo "Pull request was not merged, unable to retrieve commits."
+        # fi
       if: ${{ github.event_name == 'pull_request' }}
       shell: bash
 
