@@ -268,7 +268,9 @@ runs:
         ticket_list=""
         while IFS= read -r line; do
           echo "$line"
-          ticket_list="${ticket_list}${line}\n"
+          if [ ! -z "$my_string" ]; then
+            ticket_list="${ticket_list}${line}\n"
+          fi
         done < "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}"
         
         echo "SRG_ACTION_TICKET_LIST=${ticket_list}" >> $GITHUB_ENV
