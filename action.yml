@@ -183,16 +183,14 @@ runs:
         echo "uuuuuuuuuuuuuu"
         cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}" | sort -u | sort -n > temp.txt && mv temp.txt ${{ env.SRG_OUTPUT_TICKETS_FILE }}
         cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
-
       shell: bash
       if: ${{ github.event_name == 'pull_request' }}
+
     - run: |
         echo "WWW -> Changelog --> figure out changelog"
         echo ""
-
         link_prefix_sed_form_1="https:\/\/"
         link_prefix_sed_form_2="\/browse\/"
-
         while IFS= read -r ticket_id; do
           min_ticket_length=5
           ticket_length=${#ticket_id}
@@ -212,10 +210,9 @@ runs:
             fi
           fi
         done <"${{ env.SRG_OUTPUT_TICKETS_FILE }}"
-        
-
       shell: bash
       if: ${{ github.event_name == 'pull_request' }}
+      
     - run: |
         echo "XXX -> Echo --> 0: txt files"
         echo ""
@@ -229,9 +226,6 @@ runs:
         echo "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}"
         cat "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}"
         echo "-----------------------------------------------------"
-
-
-
       shell: bash
       if: ${{ github.event_name == 'pull_request' }}
 
@@ -247,7 +241,6 @@ runs:
 
     - name: 'TTT -> Get action trigger time'
       run: |
-            
         # Get the current date and time in Seattle time zone
         seattle_time=$(TZ='America/Los_Angeles' date '+%m/%d/%Y %T')
         echo "SRG_ACTION_TRIGGER_TIME_SEATTLE=${seattle_time}" >> $GITHUB_ENV
@@ -263,10 +256,8 @@ runs:
         echo "SRG_ACTION_TICKET_LIST=${ticket_list}" >> $GITHUB_ENV
         commits_list=$(txt_to_one_line_format_string.sh "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}")
         echo "SRG_ACTION_COMMIT_LIST=${commits_list}" >> $GITHUB_ENV
-        
       shell: bash
       if: ${{ github.event_name == 'pull_request' }}
-
 
     - name: "TTT -> Update Google Sheet --> 1: append data"
       id: append_data_google_sheet
