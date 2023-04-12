@@ -268,7 +268,7 @@ runs:
         ticket_list=""
         while IFS= read -r line; do
           echo "$line"
-          if [ ! -z "$my_string" ]; then
+          if [ ! -z "$line" ]; then
             ticket_list="${ticket_list}${line}\n"
           fi
         done < "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}"
