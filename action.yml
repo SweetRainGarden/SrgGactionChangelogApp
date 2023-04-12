@@ -36,10 +36,10 @@ inputs:
     description: 'Google sheet id'
   google_sheet_client_email:
     required: true
-    description: 'Google sheet id'
+    description: 'Google sheet client email'
   google_sheet_work_sheet_title:
     required: true
-    description: 'Work sheed tittle'
+    description: 'Google sheet work sheet tittle'
 outputs:
   jira_ticket_list:
     description: "The jira tickets list form pull request and commit message"
