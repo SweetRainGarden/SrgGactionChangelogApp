@@ -30,13 +30,13 @@ inputs:
     description: 'Regex for extract jira ticket'
   google_sheet_token:
     required: true
-    description: 'Gookge sheet token'
+    description: 'Google sheet token'
   google_sheet_id:
     required: true
-    description: 'Gookge sheet id'
+    description: 'Google sheet id'
   google_sheet_client_email:
     required: true
-    description: 'Gookge sheet id'
+    description: 'Google sheet id'
   google_sheet_work_sheet_title:
     required: true
     description: 'Work sheed tittle'
