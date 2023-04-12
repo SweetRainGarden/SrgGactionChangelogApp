@@ -265,16 +265,16 @@ runs:
         pwd=$(pwd)
         # ticket_list=$(cat "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}")
         # ticket_list=$(tr '\n' ';' < "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}")
-        ticket_list=""
-        while IFS= read -r line; do
-          echo "$line"
-          if [[ $line == $(tail -n1 "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}") ]]; then
-            ticket_list="${ticket_list}${line}"
-            echo "This is the last line: $line"
-          else
-            ticket_list="${ticket_list}${line}\n"
-          fi
-        done < "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}"
+        ticket_list=$(txt_to_one_line_format_string.sh "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}")
+        # while IFS= read -r line; do
+        #   echo "$line"
+        #   if [[ $line == $(tail -n1 "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}") ]]; then
+        #     ticket_list="${ticket_list}${line}"
+        #     echo "This is the last line: $line"
+        #   else
+        #     ticket_list="${ticket_list}${line}\n"
+        #   fi
+        # done < "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}"
         
         echo "SRG_ACTION_TICKET_LIST=${ticket_list}" >> $GITHUB_ENV
 
