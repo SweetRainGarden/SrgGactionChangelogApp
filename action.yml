@@ -294,7 +294,6 @@ runs:
                           "${{ env.SRG_ACTION_TRIGGER_TIME_BEIJING }}",
                           "${{ env.SRG_ACTION_TICKET_LIST }}",
                           "${{ env.SRG_ACTION_COMMIT_LIST }}"
-
                       ]
                     ],
                   "minCol": 1,
