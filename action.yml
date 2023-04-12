@@ -292,8 +292,9 @@ runs:
                           "${{ github.actor }}",
                           "${{ env.SRG_ACTION_TRIGGER_TIME_SEATTLE }}",
                           "${{ env.SRG_ACTION_TRIGGER_TIME_BEIJING }}",
-                          "${{ env.SRG_ACTION_COMMIT_LIST }}",
-                          "${{ env.SRG_ACTION_TICKET_LIST }}"
+                          "${{ env.SRG_ACTION_TICKET_LIST }}",
+                          "${{ env.SRG_ACTION_COMMIT_LIST }}"
+
                       ]
                     ],
                   "minCol": 1,
