@@ -282,14 +282,15 @@ runs:
         # echo "$ticket_list" >> $GITHUB_ENV
         # echo "EOF" >> $GITHUB_ENV
 
+        commits_list=$(txt_to_one_line_format_string.sh "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}")
         # commits_list=$(tr '\n' ';' < "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}")
-        commits_list=""
-        while IFS= read -r line; do
-          echo "$line"
-          if [ ! -z "$line" ]; then
-            commits_list="${commits_list}${line}\n"
-          fi
-        done < "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}"
+        # commits_list=""
+        # while IFS= read -r line; do
+        #   echo "$line"
+        #   if [ ! -z "$line" ]; then
+        #     commits_list="${commits_list}${line}\n"
+        #   fi
+        # done < "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}"
 
 
         #commits_list=$(cat "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}")
