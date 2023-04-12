@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 one_line_format_string=""
 txt_file=$1
 while IFS= read -r line; do
