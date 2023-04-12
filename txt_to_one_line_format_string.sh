@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# just read txt line by line and append \n, used it for google sheet cell. 
+# txt should not contain duplicates line.
 one_line_format_string=""
 txt_file=$1
 while IFS= read -r line; do

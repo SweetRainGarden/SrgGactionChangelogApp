@@ -247,54 +247,23 @@ runs:
 
     - name: 'TTT -> Get action trigger time'
       run: |
-
-        
+            
         # Get the current date and time in Seattle time zone
         seattle_time=$(TZ='America/Los_Angeles' date '+%m/%d/%Y %T')
         echo "SRG_ACTION_TRIGGER_TIME_SEATTLE=${seattle_time}" >> $GITHUB_ENV
 
-        # Get the current date and time in Beijing time zone
         beijing_time=$(TZ='Asia/Shanghai' date '+%m/%d/%Y %T')
         echo "SRG_ACTION_TRIGGER_TIME_BEIJING=${beijing_time}" >> $GITHUB_ENV
 
-        # Print the results
         echo "Seattle time: $seattle_time"
         echo "Beijing time: $beijing_time"
 
-
         pwd=$(pwd)
-        # ticket_list=$(cat "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}")
-        # ticket_list=$(tr '\n' ';' < "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}")
         ticket_list=$(txt_to_one_line_format_string.sh "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}")
-        # while IFS= read -r line; do
-        #   echo "$line"
-        #   if [[ $line == $(tail -n1 "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}") ]]; then
-        #     ticket_list="${ticket_list}${line}"
-        #     echo "This is the last line: $line"
-        #   else
-        #     ticket_list="${ticket_list}${line}\n"
-        #   fi
-        # done < "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}"
-        
         echo "SRG_ACTION_TICKET_LIST=${ticket_list}" >> $GITHUB_ENV
-
-        # echo "SRG_ACTION_TICKET_LIST<<EOF" >> $GITHUB_ENV
-        # echo "$ticket_list" >> $GITHUB_ENV
-        # echo "EOF" >> $GITHUB_ENV
-
         commits_list=$(txt_to_one_line_format_string.sh "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}")
-        # commits_list=$(tr '\n' ';' < "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}")
-        # commits_list=""
-        # while IFS= read -r line; do
-        #   echo "$line"
-        #   if [ ! -z "$line" ]; then
-        #     commits_list="${commits_list}${line}\n"
-        #   fi
-        # done < "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}"
-
-
-        #commits_list=$(cat "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}")
-        echo "SRG_ACTION_COMMITS_LIST=${commits_list}" >> $GITHUB_ENV
+        echo "SRG_ACTION_COMMIT_LIST=${commits_list}" >> $GITHUB_ENV
+        
       shell: bash
       if: ${{ github.event_name == 'pull_request' }}
 
@@ -323,7 +292,7 @@ runs:
                           "${{ github.actor }}",
                           "${{ env.SRG_ACTION_TRIGGER_TIME_SEATTLE }}",
                           "${{ env.SRG_ACTION_TRIGGER_TIME_BEIJING }}",
-                          "${{ env.SRG_ACTION_COMMITS_LIST }}",
+                          "${{ env.SRG_ACTION_COMMIT_LIST }}",
                           "${{ env.SRG_ACTION_TICKET_LIST }}"
                       ]
                     ],
