@@ -264,7 +264,13 @@ runs:
 
         pwd=$(pwd)
         # ticket_list=$(cat "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}")
-        ticket_list=$(tr '\n' ';' < "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}")
+        # ticket_list=$(tr '\n' ';' < "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}")
+        ticket_list=""
+        while IFS= read -r line; do
+          echo "$line"
+          ticket_list="${ticket_list}${line}\n"
+        done < "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}"
+        
         echo "SRG_ACTION_TICKET_LIST=${ticket_list}" >> $GITHUB_ENV
 
         # echo "SRG_ACTION_TICKET_LIST<<EOF" >> $GITHUB_ENV
