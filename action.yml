@@ -189,6 +189,7 @@ runs:
         echo "cccccccccccccccccc"
         
         cat "${{ env.SRG_OUTPUT_COMMITS_FILE }}" | sort -u | sort -n > temp.txt && mv temp.txt ${{ env.SRG_OUTPUT_COMMITS_FILE }}
+        echo "" >> ${{ env.SRG_OUTPUT_COMMITS_FILE }}
         cat "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
 
         echo "------------------ extract jira ticket --------------------"
