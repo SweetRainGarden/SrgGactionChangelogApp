@@ -280,9 +280,12 @@ runs:
         if [ -s "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}" ]; then
           echo "Jira ticket list is not empty."
         else
-          echo "TJira ticket list is empty."
+          echo "-----------------------------------------------"
+          echo "Please make sure your pull request contains at least one Jira ticket id in commit message, or pull request title, or pull reuqest body, or branch name."
+          echo "-----------------------------------------------"
+          exit 1
         fi
-        cat "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}"
+        cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
       shell: bash
       if: ${{ inputs.enforce_jira_policy == 'true' }}
 
