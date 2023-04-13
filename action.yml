@@ -113,12 +113,8 @@ runs:
         echo ""
         PR_NUMBER="${{ github.event.pull_request.number }}"
         REPO_NAME="${{ github.repository }}"
-        API_URL="https://api.github.com/repos/$REPO_NAME/pulls/$PR_NUMBER/commits"
- 
+        API_URL="https://api.github.com/repos/$REPO_NAME/pulls/$PR_NUMBER/commits" 
         curl -s -H "Authorization: token ${{ inputs.gh_token }}" -H "Accept: application/vnd.github+json" $API_URL > "${{ env.SRG_TEMP_FILE}}"
-
-        PR_MERGED="${{ github.event.pull_request.merged }}"
-        # if [ "$PR_MERGED" = "true" ]; then
         jq_installed=$(command -v jq)
         if [ -z "$jq_installed" ]; then
           echo "jq is not installed on the machie, exit..." 
@@ -130,10 +126,6 @@ runs:
         cat "./${{ env.SRG_TEMP_FILE}}" | jq -r '.[] | "\(.commit.message)"' > "./${{ env.SRG_TEMP_COMMITS_FILE }}"
         echo "" >> "./${{ env.SRG_TEMP_COMMITS_FILE }}"
         cat "./${{ env.SRG_TEMP_COMMITS_FILE }}"
-
-        # else
-        #   echo "Pull request was not merged, unable to retrieve commits."
-        # fi
       if: ${{ github.event_name == 'pull_request' }}
       shell: bash
 
@@ -156,13 +148,12 @@ runs:
         pwd=$(pwd)
         echo "pwd -> $pwd"
         srg_changelog_abs_path="$(pwd)/${{ env.SRG_OUTPUT_CHANGLOG_FILE }}"
-        echo "jira_ticket_list=$(echo abc-$RANDOM)" >> $GITHUB_OUTPUT
         echo "srg_changelog_file=$srg_changelog_abs_path" >> $GITHUB_OUTPUT
 
       shell: bash
 
     - run: |
-        echo "WWW -> Cat Files --> 0: txt files"
+        echo "WWW -> Extract Jira tickets and commit messages"
         echo ""
         pattern_commit_convention="${{ inputs.pattern_commit_convention }}"
         pattern_jira_tickets="${{ inputs.pattern_jira_tickets }}"
@@ -176,87 +167,37 @@ runs:
         cat "${{ env.SRG_PR_CONTENT_TXT }}"
         echo "----------------------------------------------------------------------------"
 
-
-
-        # if [ -f "/path/to/file" ]; then
-        #   echo "File \"/path/to/file\" exists"
-        # fi
         touch "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
+
         echo "------------------ extract commit message --------------------"
         cat "${{ env.SRG_PR_CONTENT_TXT }}" "${{ env.SRG_TEMP_COMMITS_FILE }}" | grep -i -E "(${pattern_commit_convention}):" | sed -e 's/([^()]*)//g' | sed 's/;/,/g'| sort -u | sort -n > "${{ env.SRG_OUTPUT_COMMITS_FILE }}" 
-        # cat "${{ env.SRG_TEMP_COMMITS_FILE }}" | grep -i -E "(${pattern_commit_convention}):" || (echo "" && true)  | sed -e 's/([^()]*)//g' | sed 's/;/,/g'| sort -u | sort -n >> "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
-        
         echo "cat: ${{ env.SRG_OUTPUT_COMMITS_FILE }}"
         cat "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
-        echo "cccccccccccccccccc"
-        
-        # cat "${{ env.SRG_OUTPUT_COMMITS_FILE }}" | sort -u | sort -n > temp.txt
-        # cat temp.txt > "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
-        # rm -f temp.txt
-        # cat "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
-
+      
         echo "------------------ extract jira ticket --------------------"
         cat "${{ env.SRG_PR_CONTENT_TXT }}" "${{ env.SRG_TEMP_COMMITS_FILE }}" | grep -Eo "${pattern_jira_tickets}" | sort -u | sort -n > "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
-        # cat "${{ env.SRG_TEMP_COMMITS_FILE }}" | grep -Eo "${pattern_jira_tickets}" | sort -u | sort -n >> "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
+        echo "cat: ${{ env.SRG_OUTPUT_TICKETS_FILE }}"
         cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
-        echo "jjjjjjjjjjjjjjjjjjjj"
-        cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}" | sort -u | sort -n > temp.txt && mv temp.txt ${{ env.SRG_OUTPUT_TICKETS_FILE }}
-        cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
-      shell: bash
-      if: ${{ github.event_name == 'pull_request' }}
 
-    - run: |
-        echo "WWW -> Changelog --> figure out changelog"
-        echo ""
-        link_prefix_sed_form_1="https:\/\/"
-        link_prefix_sed_form_2="\/browse\/"
-        while IFS= read -r ticket_id; do
-          min_ticket_length=5
-          ticket_length=${#ticket_id}
-          if (($ticket_length >= $min_ticket_length)); then
-            ticket_link="https://${{ inputs.jira_domain }}/browse/${ticket_id}"
-            ticket_link_sed_form="${link_prefix_sed_form_1}${{ inputs.jira_domain }}${link_prefix_sed_form_2}${ticket_id}"
-            echo "ticket_link_sed_form: $ticket_link_sed_form ttttt"
-            echo "- [$ticket_id](${ticket_link})" >>"${{ env.SRG_OUTPUT_CHANGLOG_FILE }}"
-
-            if [ "$RUNNER_OS" == "Linux" ]; then
-              sed -i "s/$ticket_id/[${ticket_id}]($ticket_link_sed_form)/g" "${{ env.SRG_TEMP_COMMITS_FILE }}"
-            elif [ "$RUNNER_OS" == "macOS" ]; then
-              sed -i '' "s/$ticket_id/[${ticket_id}]($ticket_link_sed_form)/g" "${{ env.SRG_TEMP_COMMITS_FILE }}"
-            else
-              echo "\$RUNNER_OS is not supported"
-              exit 1
-            fi
-          fi
-        done <"${{ env.SRG_OUTPUT_TICKETS_FILE }}"
       shell: bash
       if: ${{ github.event_name == 'pull_request' }}
       
     - run: |
-        echo "XXX -> Echo --> 0: txt files"
+        echo "XXX -> Print --> 0: cat files"
         echo ""
         pwd="$(pwd)"
-        echo "${pwd}/${{ env.SRG_OUTPUT_CHANGLOG_FILE }}"
+        echo "cat: ${pwd}/${{ env.SRG_OUTPUT_CHANGLOG_FILE }}"
         cat "${pwd}/${{ env.SRG_OUTPUT_CHANGLOG_FILE }}"
         echo "-----------------------------------------------------"
-        echo "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}"
+        echo "cat: ${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}"
         cat "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}"
         echo "-----------------------------------------------------"
-        echo "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}"
+        echo "cat: ${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}"
         cat "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}"
         echo "-----------------------------------------------------"
       shell: bash
       if: ${{ github.event_name == 'pull_request' }}
 
-    - run: |
-        echo "ZZZ -> Clean up --> 0: txt files"
-        echo ""
-        echo "------------- pull_request closed and merged ------------"
-        rm -f "${{ env.SRG_PR_CONTENT_TXT }}"
-        rm -f "${{ env.SRG_TEMP_FILE }}"
-        rm -f "${{ env.SRG_TEMP_COMMITS_FILE }}"
-      shell: bash
-      if: ${{ github.event_name == 'pull_request' }}
 
     - name: 'TTT -> Get action trigger time'
       run: |
@@ -330,3 +271,13 @@ runs:
         DOUBLE_QUOTE: '\"'
         GSHEET_CLIENT_EMAIL: ${{ inputs.google_sheet_client_email }}
         GSHEET_PRIVATE_KEY: ${{ inputs.google_sheet_token }}
+
+    - run: |
+        echo "ZZZ -> Clean up --> 0: txt files"
+        echo ""
+        echo "------------- pull_request closed and merged ------------"
+        rm -f "${{ env.SRG_PR_CONTENT_TXT }}"
+        rm -f "${{ env.SRG_TEMP_FILE }}"
+        rm -f "${{ env.SRG_TEMP_COMMITS_FILE }}"
+      shell: bash
+      if: ${{ github.event_name == 'pull_request' }}
