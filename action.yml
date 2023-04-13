@@ -13,6 +13,10 @@
 name: 'Srg auto collect changelog'
 description: 'Auto collect changelog'
 inputs:
+  enforce_jira_policy:
+    description: 'Enforce Jira policy'
+    required: fasle
+    default: 'true'
   jira_domain:
     description: 'The company Jira domain'
     required: true
@@ -266,6 +270,18 @@ runs:
         echo "SRG_ACTION_COMMIT_LIST=${commits_list}" >> $GITHUB_ENV
       shell: bash
       if: ${{ github.event_name == 'pull_request' }}
+
+    - name: 'TTT -> Check Jira policy'
+      run: |
+        echo "TTT -> Check Jira policy."
+        if [ -s "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}" ]; then
+          echo "Jira ticket list is not empty."
+        else
+          echo "TJira ticket list is empty."
+        fi
+        cat "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}"
+      shell: bash
+      if: ${{ inputs.enforce_jira_policy == 'true' }}
 
     - name: "TTT -> Update Google Sheet --> 1: append data"
       id: append_data_google_sheet
