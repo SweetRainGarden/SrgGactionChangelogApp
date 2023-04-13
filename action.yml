@@ -277,7 +277,7 @@ runs:
     - name: 'TTT -> Check Jira policy'
       run: |
         echo "TTT -> Check Jira policy."
-        if [ -s "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}" ]; then
+        if [ -s "./${{ env.SRG_OUTPUT_TICKETS_FILE }}" ]; then
           echo "Jira ticket list is not empty."
         else
           echo "-----------------------------------------------"
