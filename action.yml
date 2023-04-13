@@ -128,7 +128,7 @@ runs:
           exit 1
         fi
 
-        cat "./${{ env.SRG_TEMP_FILE}}"
+        # cat "./${{ env.SRG_TEMP_FILE}}"
         echo "---------------------------------------------"
         cat "./${{ env.SRG_TEMP_FILE}}" | jq -r '.[] | "\(.commit.message)"' > "./${{ env.SRG_TEMP_COMMITS_FILE }}"
         echo "" >> "./${{ env.SRG_TEMP_COMMITS_FILE }}"
