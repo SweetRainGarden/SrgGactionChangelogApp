@@ -167,9 +167,9 @@ runs:
 
         echo "------------------ cat ${{ env.SRG_COMMITS_FILE }} --------------------"
         cat "${{ env.SRG_COMMITS_FILE }}"
-        echo "kkkkkkkkkkkkkkkkkk"
+        echo "cccccccccccckkkkkkkkkkkkkkkkkk"
         cat "${{ env.SRG_PR_CONTENT_TXT }}"
-        echo "kkkkkkkkkkkkkkkkkk"
+        echo "ppppppppppppkkkkkkkkkkkkkkkkkk"
 
 
         # if [ -f "/path/to/file" ]; then
