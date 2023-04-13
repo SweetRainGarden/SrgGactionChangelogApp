@@ -48,9 +48,6 @@ outputs:
   jira_ticket_list:
     description: "The jira tickets list form pull request and commit message"
     value: ${{ steps.export_outputs_step.outputs.jira_ticket_list }}
-  srg_test_output:
-    description: "Test Github action output"
-    value: ${{ steps.export_outputs_step.outputs.srg_test_output }}
   srg_changelog_file:
     description: "The file that contains changelog of current pull request"
     value: ${{ steps.export_outputs_step.outputs.srg_changelog_file }}
@@ -161,7 +158,7 @@ runs:
         srg_changelog_abs_path="$(pwd)/${{ env.SRG_OUTPUT_CHANGLOG_FILE }}"
         echo "jira_ticket_list=$(echo abc-$RANDOM)" >> $GITHUB_OUTPUT
         echo "srg_changelog_file=$srg_changelog_abs_path" >> $GITHUB_OUTPUT
-        echo "srg_test_output=Hello_output_gaction" >> $GITHUB_OUTPUT
+
       shell: bash
 
     - run: |
