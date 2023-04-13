@@ -96,7 +96,6 @@ runs:
         echo "SRG_PR_CONTENT_TXT=srg_temp_pr_and_branch_info.txt" >> $GITHUB_ENV
         echo "SRG_TEMP_FILE=srg_temp.txt" >> $GITHUB_ENV
         echo "SRG_TEMP_COMMITS_FILE=srg_temp_commits.txt" >> $GITHUB_ENV
-        echo "SRG_OUTPUT_CHANGLOG_FILE=srg_output_changelog.md" >> $GITHUB_ENV
         echo "SRG_OUTPUT_TICKETS_FILE=srg_output_tickets.txt" >> $GITHUB_ENV
         echo "SRG_OUTPUT_COMMITS_FILE=srg_output_commits.txt" >> $GITHUB_ENV
       shell: bash
@@ -115,6 +114,7 @@ runs:
         REPO_NAME="${{ github.repository }}"
         API_URL="https://api.github.com/repos/$REPO_NAME/pulls/$PR_NUMBER/commits" 
         curl -s -H "Authorization: token ${{ inputs.gh_token }}" -H "Accept: application/vnd.github+json" $API_URL > "${{ env.SRG_TEMP_FILE}}"
+
         jq_installed=$(command -v jq)
         if [ -z "$jq_installed" ]; then
           echo "jq is not installed on the machie, exit..." 
@@ -144,12 +144,6 @@ runs:
       run: |
         echo "extract jira ticket from pr and commits"
         echo ""
-        pwd
-        pwd=$(pwd)
-        echo "pwd -> $pwd"
-        srg_changelog_abs_path="$(pwd)/${{ env.SRG_OUTPUT_CHANGLOG_FILE }}"
-        echo "srg_changelog_file=$srg_changelog_abs_path" >> $GITHUB_OUTPUT
-
       shell: bash
 
     - run: |
@@ -186,8 +180,7 @@ runs:
         echo "XXX -> Print --> 0: cat files"
         echo ""
         pwd="$(pwd)"
-        echo "cat: ${pwd}/${{ env.SRG_OUTPUT_CHANGLOG_FILE }}"
-        cat "${pwd}/${{ env.SRG_OUTPUT_CHANGLOG_FILE }}"
+
         echo "-----------------------------------------------------"
         echo "cat: ${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}"
         cat "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}"
