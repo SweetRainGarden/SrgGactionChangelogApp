@@ -179,9 +179,9 @@ runs:
         # if [ -f "/path/to/file" ]; then
         #   echo "File \"/path/to/file\" exists"
         # fi
-        
+        touch "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
         echo "------------------ extract commit message --------------------"
-        cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -i -E "(${pattern_commit_convention}):" || (echo "" && true)  | sed -e 's/([^()]*)//g' | sed 's/;/,/g'| sort -u | sort -n > "${{ env.SRG_OUTPUT_COMMITS_FILE }}" 
+        cat "${{ env.SRG_PR_CONTENT_TXT }}" | grep -i -E "(${pattern_commit_convention}):" || (echo "" && true)  | sed -e 's/([^()]*)//g' | sed 's/;/,/g'| sort -u | sort -n >> "${{ env.SRG_OUTPUT_COMMITS_FILE }}" 
         cat "${{ env.SRG_COMMITS_FILE }}" | grep -i -E "(${pattern_commit_convention}):" || (echo "" && true)  | sed -e 's/([^()]*)//g' | sed 's/;/,/g'| sort -u | sort -n >> "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
         
         echo "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
