@@ -17,6 +17,10 @@ inputs:
     description: 'Enforce Jira policy'
     required: fasle
     default: 'true'
+  enforce_commit_policy:
+    description: 'Enforce commit policy'
+    required: fasle
+    default: 'true'
   jira_domain:
     description: 'The company Jira domain'
     required: true
