@@ -302,8 +302,9 @@ runs:
     - name: "TTT -> Update Google Sheet --> 2: echo success result"
       env:
         RESULTS: ${{ steps.append_data_google_sheet.outputs.results }}
-      run: echo "append_data_google_sheet step result:"
-      run: echo "$RESULTS"
+      run: |
+        echo "append_data_google_sheet step result:"
+        echo "$RESULTS"
       shell: bash
       if: steps.append_data_google_sheet.outcome == 'success'
 
