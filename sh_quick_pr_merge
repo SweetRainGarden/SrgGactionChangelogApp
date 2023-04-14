@@ -61,7 +61,6 @@ for machine_name in {"","","ubuntu-latest",""}; do
   machine="${machine_name}"
 
   ci_trigger_txt="./docs/test_ci_change.txt"
-#  ci_trigger_txt="./WyzeAppKmmsdkAndroid/WyzePluginKnetworkKotlin/test_ci_change.txt"
   touch "$ci_trigger_txt"
 
     
@@ -106,11 +105,6 @@ for machine_name in {"","","ubuntu-latest",""}; do
 
   commit_id=$(git rev-parse HEAD)
 
-  #https://github.com/wyzelabs-inc/WyzeAppKmmsdkPoc/commit/f2275ec063704539865ecdd3d29db8e27e2a1ef1
-  #if msg contains diff:
-  #git last commit id
-
-  #https://github.com/wyzelabs-inc/WyzeAppKmmsdkPoc/pull/166/files
 
   if [[ -z "${addDiffToReadme}" ]]; then
     echo "do not add diff to readme file"
@@ -126,23 +120,4 @@ for machine_name in {"","","ubuntu-latest",""}; do
     git commit -m "docs: add diff link for commit: $commit_id"
     git push
   fi
-
-  #note:
-  #1, if the PR title is empty, Github will use the latest commit message as the PR title
-
-  #  https://ai-tag-mapping-api.wyzecam.com/ai-tag-mapping
 done
-# ./gradlew ktlintFormat
-# ./gradlew ktlintCheck
-#detekt - Runs a detekt analysis and complexity report on your source files. Configure the analysis inside the detekt closure.
-#By default, the standard rule set without any ignore list is executed on sources files located in src/main/java, src/test/java, src/main/kotlin and src/test/kotlin.
-#Reports are automatically generated in xml, html, txt, md, and sarif format and can be found in build/reports/detekt/detekt.[xml|html|txt|md|sarif] respectively.
-#Please note that the detekt task is automatically run when executing gradle check.
-#You may specify Gradle task CLI option for auto correction, such as gradle detekt --auto-correct.
-#detektGenerateConfig - Generates a default detekt configuration file into your project directory.
-#detektBaseline - Similar to detekt, but creates a code smell baseline. Further detekt runs will only feature new smells not in this list.
-
-#./gradlew :WyzePluginKmmsdkPoc:detekt
-#./gradlew :WyzeAppKmmsdkAndroid:detekt
-#./gradlew :WyzeAppKmmsdkAndroid:WyzePluginKnetworkKotlin:detekt
-#
