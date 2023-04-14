@@ -142,11 +142,24 @@ runs:
         echo ""
       shell: bash
 
+    - name: 'TTT -> Check Jira policy'
+      run: |
+        echo "TTT -> Check Jira policy."
+        if [ -s "./${{ env.SRG_OUTPUT_TICKETS_FILE }}" ]; then
+          echo "Jira ticket list is not empty."
+        else
+          echo "-----------------------------------------------"
+          echo "Please make sure your pull request contains at least one Jira ticket id in commit message, or pull request title, or pull reuqest body, or branch name."
+          echo "-----------------------------------------------"
+          exit 1
+        fi
+        cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
+      shell: bash
+      if: ${{ inputs.enforce_jira_policy == 'true' }}
+
     - run: |
         echo "WWW -> Extract Jira tickets and commit messages"
         echo ""
-        pattern_commit_convention="${{ inputs.pattern_commit_convention }}"
-        pattern_jira_tickets="${{ inputs.pattern_jira_tickets }}"
 
         echo "------------------ cat ${{ env.SRG_TEMP_COMMITS_FILE }} --------------------"
         cat "${{ env.SRG_TEMP_COMMITS_FILE }}"
@@ -160,12 +173,12 @@ runs:
         touch "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
 
         echo "------------------ extract commit message --------------------"
-        cat "${{ env.SRG_PR_CONTENT_TXT }}" "${{ env.SRG_TEMP_COMMITS_FILE }}" | grep -i -E "(${pattern_commit_convention}):" | sed -e 's/([^()]*)//g' | sed 's/;/,/g'| sort -u | sort -n > "${{ env.SRG_OUTPUT_COMMITS_FILE }}" 
+        cat "${{ env.SRG_PR_CONTENT_TXT }}" "${{ env.SRG_TEMP_COMMITS_FILE }}" | grep -i -E "(${{ inputs.pattern_commit_convention }}):" | sed -e 's/([^()]*)//g' | sed 's/;/,/g'| sort -u | sort -n > "${{ env.SRG_OUTPUT_COMMITS_FILE }}" 
         echo "cat: ${{ env.SRG_OUTPUT_COMMITS_FILE }}"
         cat "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
       
         echo "------------------ extract jira ticket --------------------"
-        cat "${{ env.SRG_PR_CONTENT_TXT }}" "${{ env.SRG_TEMP_COMMITS_FILE }}" | grep -Eo "${pattern_jira_tickets}" | sort -u | sort -n > "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
+        cat "${{ env.SRG_PR_CONTENT_TXT }}" "${{ env.SRG_TEMP_COMMITS_FILE }}" | grep -Eo "${{ inputs.pattern_jira_tickets }}" | sort -u | sort -n > "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
         echo "cat: ${{ env.SRG_OUTPUT_TICKETS_FILE }}"
         cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
 
@@ -207,21 +220,6 @@ runs:
         echo "SRG_ACTION_COMMIT_LIST=${commits_list}" >> $GITHUB_ENV
       shell: bash
       if: ${{ github.event_name == 'pull_request' }}
-
-    - name: 'TTT -> Check Jira policy'
-      run: |
-        echo "TTT -> Check Jira policy."
-        if [ -s "./${{ env.SRG_OUTPUT_TICKETS_FILE }}" ]; then
-          echo "Jira ticket list is not empty."
-        else
-          echo "-----------------------------------------------"
-          echo "Please make sure your pull request contains at least one Jira ticket id in commit message, or pull request title, or pull reuqest body, or branch name."
-          echo "-----------------------------------------------"
-          exit 1
-        fi
-        cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
-      shell: bash
-      if: ${{ inputs.enforce_jira_policy == 'true' }}
 
     - name: "TTT -> Update Google Sheet --> 1: append data"
       id: append_data_google_sheet
