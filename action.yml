@@ -80,7 +80,7 @@ runs:
       shell: bash
 
     - run: |
-        echo name: "AAA -> Figure out Rnv --> 0: Test srcipt"
+        echo name: "AAA -> Figure out env --> 0: Test srcipt"
         echo ""
         goodbye.sh
       shell: bash
@@ -138,7 +138,7 @@ runs:
     - if: ${{ github.event_name == 'pull_request' }}
       id: export_outputs_step
       run: |
-        echo "extract jira ticket from pr and commits"
+        echo "WWW -> Print original content"
         # add a end line for SRG_PR_CONTENT_TXT
         echo "" >> "${{ env.SRG_PR_CONTENT_TXT }}"
         echo ""
@@ -156,6 +156,12 @@ runs:
 
     - run: |
         echo "WWW -> Extract Jira tickets"
+        if cat "${{ env.SRG_PR_CONTENT_TXT }}" "${{ env.SRG_TEMP_COMMITS_FILE }}" | grep -Eo "${{ inputs.pattern_jira_tickets }}" >/dev/null 2>&1; then
+          echo "Extract Jira tickets succeed"
+        else
+          echo "Extract Jira tickets failed"
+        fi
+        
         cat "${{ env.SRG_PR_CONTENT_TXT }}" "${{ env.SRG_TEMP_COMMITS_FILE }}" | grep -Eo "${{ inputs.pattern_jira_tickets }}" | sort -u | sort -n > "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
         echo "cat: ${{ env.SRG_OUTPUT_TICKETS_FILE }}"
         cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
