@@ -185,6 +185,11 @@ runs:
           echo "- pull request 标题栏, 或者 pull reuqest 内题栏" >>$GITHUB_STEP_SUMMARY
           echo "- 分支名称，（branch name）" >>$GITHUB_STEP_SUMMARY
 
+
+          echo "::notice::my message text"
+          echo "::warning::my message text"
+          echo "::error::my message text"
+
           exit 1
         fi
         cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
