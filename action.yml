@@ -174,9 +174,6 @@ runs:
         if [ -s "./${{ env.SRG_OUTPUT_TICKETS_FILE }}" ]; then
           echo "Jira ticket list is not empty."
         else
-
-
-          
           SUMMARY_NO_TICKET_ERROR=""
           SUMMARY_NO_TICKET_ERROR="${SUMMARY_NO_TICKET_ERROR}---------------------------------------------------------------------------------------------\n"
           SUMMARY_NO_TICKET_ERROR="${SUMMARY_NO_TICKET_ERROR}Please make sure your pull request contains at least one Jira ticket id in any those places:\n"
@@ -191,6 +188,7 @@ runs:
           SUMMARY_NO_TICKET_ERROR="${SUMMARY_NO_TICKET_ERROR}pull request 标题栏, 或者 pull reuqest 内题栏\n"
           SUMMARY_NO_TICKET_ERROR="${SUMMARY_NO_TICKET_ERROR}分支名称，（branch name）\n"
           SUMMARY_NO_TICKET_ERROR="${SUMMARY_NO_TICKET_ERROR}---------------------------------------------------------------------------------------------\n"
+          echo "$SUMMARY_NO_TICKET_ERROR"
           echo "$SUMMARY_NO_TICKET_ERROR" >> $GITHUB_STEP_SUMMARY
 
           exit 1
