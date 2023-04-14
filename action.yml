@@ -30,7 +30,7 @@ inputs:
     required: true
   pattern_commit_convention:
     required: false
-    default: "feat|fix|ci|chore|docs"
+    default: "feat|fix|ci|chore|docs|new_api|break_api|deprecate_api"
     description: 'The commit message convention pattern'
   pattern_jira_tickets:
     required: false
