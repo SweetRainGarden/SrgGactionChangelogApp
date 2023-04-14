@@ -298,6 +298,12 @@ runs:
         DOUBLE_QUOTE: '\"'
         GSHEET_CLIENT_EMAIL: ${{ inputs.google_sheet_client_email }}
         GSHEET_PRIVATE_KEY: ${{ inputs.google_sheet_token }}
+        
+    - name: "TTT -> Update Google Sheet --> 2: echo success result"
+      if: steps.append_data_google_sheet.outcome == 'success'
+      env:
+        RESULTS: ${{ steps.append_data_google_sheet.outputs.results }}
+      run: echo "$RESULTS"
 
     - run: |
         echo "ZZZ -> Clean up --> 0: txt files"
