@@ -139,18 +139,49 @@ runs:
       id: export_outputs_step
       run: |
         echo "extract jira ticket from pr and commits"
+        # add a end line for SRG_PR_CONTENT_TXT
+        echo "" >> "${{ env.SRG_PR_CONTENT_TXT }}"
+
         echo ""
+
+        echo "------------------ cat ${{ env.SRG_TEMP_COMMITS_FILE }} --------------------"
+        cat "${{ env.SRG_TEMP_COMMITS_FILE }}"
+        echo "----------------------------------------------------------------------------"
+        echo ""
+        
+        echo "------------------ cat ${{ env.SRG_PR_CONTENT_TXT }} --------------------"
+        cat "${{ env.SRG_PR_CONTENT_TXT }}"
+        echo "----------------------------------------------------------------------------"
+
       shell: bash
 
+    - run: |
+        echo "WWW -> Extract Jira tickets"
+        cat "${{ env.SRG_PR_CONTENT_TXT }}" "${{ env.SRG_TEMP_COMMITS_FILE }}" | grep -Eo "${{ inputs.pattern_jira_tickets }}" | sort -u | sort -n > "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
+        echo "cat: ${{ env.SRG_OUTPUT_TICKETS_FILE }}"
+        cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
+      shell: bash
+      if: ${{ github.event_name == 'pull_request' }}
+      
     - name: 'TTT -> Check Jira policy'
       run: |
         echo "TTT -> Check Jira policy."
         if [ -s "./${{ env.SRG_OUTPUT_TICKETS_FILE }}" ]; then
           echo "Jira ticket list is not empty."
         else
-          echo "-----------------------------------------------"
-          echo "Please make sure your pull request contains at least one Jira ticket id in commit message, or pull request title, or pull reuqest body, or branch name."
-          echo "-----------------------------------------------"
+          echo "---------------------------------------------------------------------------------------------"
+          echo "Please make sure your pull request contains at least one Jira ticket id in any those places:"
+          echo "commit message"
+          echo "pull request title, or pull reuqest body"
+          echo "branch name."
+          echo "---------------------------------------------------------------------------------------------"
+          echo ""
+          echo "---------------------------------------------------------------------------------------------"
+          echo "请确保当前 pull request 关联（至少）一个 Jira ticket id"， 以下任何地方都可以：
+          echo "提交信息 （commit message）"
+          echo "pull request 标题栏, 或者 pull reuqest 内题栏"
+          echo "分支名称，（branch name）"
+          echo "---------------------------------------------------------------------------------------------"
           exit 1
         fi
         cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
@@ -158,30 +189,10 @@ runs:
       if: ${{ inputs.enforce_jira_policy == 'true' }}
 
     - run: |
-        echo "WWW -> Extract Jira tickets and commit messages"
-        echo ""
-
-        echo "------------------ cat ${{ env.SRG_TEMP_COMMITS_FILE }} --------------------"
-        cat "${{ env.SRG_TEMP_COMMITS_FILE }}"
-        echo "----------------------------------------------------------------------------"
-        echo ""
-        echo "" >> "${{ env.SRG_PR_CONTENT_TXT }}"
-        echo "------------------ cat ${{ env.SRG_PR_CONTENT_TXT }} --------------------"
-        cat "${{ env.SRG_PR_CONTENT_TXT }}"
-        echo "----------------------------------------------------------------------------"
-
-        touch "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
-
-        echo "------------------ extract commit message --------------------"
+        echo "WWW -> Extract commit messages"
         cat "${{ env.SRG_PR_CONTENT_TXT }}" "${{ env.SRG_TEMP_COMMITS_FILE }}" | grep -i -E "(${{ inputs.pattern_commit_convention }}):" | sed -e 's/([^()]*)//g' | sed 's/;/,/g'| sort -u | sort -n > "${{ env.SRG_OUTPUT_COMMITS_FILE }}" 
         echo "cat: ${{ env.SRG_OUTPUT_COMMITS_FILE }}"
         cat "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
-      
-        echo "------------------ extract jira ticket --------------------"
-        cat "${{ env.SRG_PR_CONTENT_TXT }}" "${{ env.SRG_TEMP_COMMITS_FILE }}" | grep -Eo "${{ inputs.pattern_jira_tickets }}" | sort -u | sort -n > "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
-        echo "cat: ${{ env.SRG_OUTPUT_TICKETS_FILE }}"
-        cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
-
       shell: bash
       if: ${{ github.event_name == 'pull_request' }}
       
