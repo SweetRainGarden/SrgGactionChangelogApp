@@ -229,6 +229,29 @@ runs:
       shell: bash
       if: ${{ github.event_name == 'pull_request' }}
       
+    - name: 'TTT -> Enforce Jira policy'
+      run: |
+        echo "TTT -> Enforce Jira policy."
+        if [ -s "./${{ env.SRG_OUTPUT_COMMITS_FILE }}" ]; then
+          echo "Jira ticket list is not empty."
+          cat "./${{ env.SRG_OUTPUT_COMMITS_FILE }}"
+        else
+          echo "## ❌ Please make sure your pull request follows up the Wyze commit convention" >>$GITHUB_STEP_SUMMARY
+          echo "- commit message" >>$GITHUB_STEP_SUMMARY
+          echo "- pull request title, or pull reuqest body" >>$GITHUB_STEP_SUMMARY
+          echo "- branch name." >>$GITHUB_STEP_SUMMARY
+          echo "## ❌ 请确保当前 pull request 关联（至少）一个 Jira ticket id， 以下任何地方都可以:" >>$GITHUB_STEP_SUMMARY
+          echo "- 提交信息 （commit message）" >>$GITHUB_STEP_SUMMARY
+          echo "- pull request 标题栏, 或者 pull reuqest 内题栏" >>$GITHUB_STEP_SUMMARY
+          echo "- 分支名称，（branch name）" >>$GITHUB_STEP_SUMMARY
+          echo "::error::❌ ❌ Please make sure your pull request follows up the Wyze commit convention"
+          echo "::error::❌ 请确保当前 pull request 或者 commit message 关联（至少）一个 Jira ticket id"
+          exit 1
+        fi
+        cat "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
+      shell: bash
+      if: ${{ inputs.enforce_commit_policy == 'true' }}
+
     - run: |
         echo "XXX -> Print --> 0: cat files"
         echo ""
