@@ -206,8 +206,8 @@ runs:
           echo "- 提交信息 （commit message）" >>$GITHUB_STEP_SUMMARY
           echo "- pull request 标题栏, 或者 pull reuqest 内题栏" >>$GITHUB_STEP_SUMMARY
           echo "- 分支名称，（branch name）" >>$GITHUB_STEP_SUMMARY
-          echo "::notice::Please make sure your pull request or commit messages contains at least one Jira ticket id"
-          echo "::notice::请确保当前 pull request 或者 commit message 关联（至少）一个 Jira ticket id"
+          echo "::warning::Please make sure your pull request or commit messages contains at least one Jira ticket id"
+          echo "::warning::请确保当前 pull request 或者 commit message 关联（至少）一个 Jira ticket id"
         fi
         cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
       shell: bash
