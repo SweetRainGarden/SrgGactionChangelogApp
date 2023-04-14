@@ -184,20 +184,8 @@ runs:
           echo "- pull request 标题栏, 或者 pull reuqest 内题栏" >>$GITHUB_STEP_SUMMARY
           echo "- 分支名称，（branch name）" >>$GITHUB_STEP_SUMMARY
 
-          echo "::error::## Please make sure your pull request contains at least one Jira ticket id in any those places:"
-          echo "::error::- commit message"
-          echo "::error::- pull request title, or pull reuqest body"
-          echo "::error::- branch name."
-          echo "::error::## 请确保当前 pull request 关联（至少）一个 Jira ticket id， 以下任何地方都可以:"
-          echo "::error::- 提交信息 （commit message）"
-          echo "::error::- pull request 标题栏, 或者 pull reuqest 内题栏"
-          echo "::error::- 分支名称，（branch name）"
-
-
-          echo "::notice::my message text"
-          echo "::warning::my message text"
-          echo "::error::my message text"
-
+          echo "::error::## Please make sure your pull request contains at least one Jira ticket id"
+          echo "::error::请确保当前 pull request 关联（至少）一个 Jira ticket id"
           exit 1
         fi
         cat "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
