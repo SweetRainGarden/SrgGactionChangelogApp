@@ -300,10 +300,12 @@ runs:
         GSHEET_PRIVATE_KEY: ${{ inputs.google_sheet_token }}
         
     - name: "TTT -> Update Google Sheet --> 2: echo success result"
-      if: steps.append_data_google_sheet.outcome == 'success'
       env:
         RESULTS: ${{ steps.append_data_google_sheet.outputs.results }}
+      run: echo "append_data_google_sheet step result:"
       run: echo "$RESULTS"
+      shell: bash
+      if: steps.append_data_google_sheet.outcome == 'success'
 
     - run: |
         echo "ZZZ -> Clean up --> 0: txt files"
