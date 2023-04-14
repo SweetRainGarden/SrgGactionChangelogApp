@@ -141,7 +141,6 @@ runs:
         echo "extract jira ticket from pr and commits"
         # add a end line for SRG_PR_CONTENT_TXT
         echo "" >> "${{ env.SRG_PR_CONTENT_TXT }}"
-
         echo ""
 
         echo "------------------ cat ${{ env.SRG_TEMP_COMMITS_FILE }} --------------------"

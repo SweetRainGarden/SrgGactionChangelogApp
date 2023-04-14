@@ -24,9 +24,11 @@ fi
 
 cd "$repo_dir_path" || return
 
-ticket_id_1="wit-65"
-ticket_id_2="wma-3456"
-ticket_id_3="owl-32324"
+ticket_id_1="test-65"
+ticket_id_2="test-3456"
+ticket_id_3="test-32324"
+commit_type="feat:"
+
 
 # for machine_name in {"mobile_app_machine","mobile_app_machine_1","mobile_app_machine_2","mobile_app_machine_3","mobile_app_machine_5","mobile_app_machine_6","mobile_app_machine_7","mobile_app_machine_8"}; do
 for machine_name in {"","","ubuntu-latest",""}; do
@@ -70,19 +72,18 @@ for machine_name in {"","","ubuntu-latest",""}; do
     touch "$ci_trigger_txt"
     echo "${branch_name} -> ${current_time}" >>"$ci_trigger_txt"
     git add "$ci_trigger_txt"
-    git commit -m "commit only for test_ci_change: ${machine}, ${current_time} wit-12346"
+    git commit -m "$commit_type commit only for test_ci_change: ${machine}, ${current_time}, test ticket id: $ticket_id_2"
   else
     echo "has local file changes, add it and commit it"
     echo "${branch_name} -> ${current_time}" >>"$ci_trigger_txt"
     git add .
     if [[ -z "${msg}" ]]; then
       echo "empty msg string"
-      git commit -m "ci: auto commit mes : ${machine}, ${current_time}"
+      git commit -m "$commit_type commit only for test_ci_change: ${machine}, ${current_time}, test ticket id: $ticket_id_3"
     else
-      git commit -m "chore: $msg"
+      git commit -m "ci: chore: $msg, test ticket id: $ticket_id_3"
     fi
   fi
-
 
 
 #feat|fix|ci|chore|docs|test|new_api|break_api|deprecate_api
@@ -90,9 +91,9 @@ for machine_name in {"","","ubuntu-latest",""}; do
   git push origin "${test_branch}"
   sleep 1
   if [[ -z "${msg}" ]]; then
-    pr_link=$(gh pr create --base "$start_branch" --title "run on ${machine}, ${current_time}" --body "fix: Merge PR by script: $ticket_id_1")
+    pr_link=$(gh pr create --base "$start_branch" --title "run on ${machine}, ${current_time}" --body "${commit_type} Merge PR by script: $ticket_id_1")
   else
-    pr_link=$(gh pr create --base "$start_branch" --title "$msg $ticket_id_2" --body "feat: Merge PR by script $ticket_id_3")
+    pr_link=$(gh pr create --base "$start_branch" --title "$msg $ticket_id_2" --body "${commit_type}Merge PR by script $ticket_id_3")
   fi
 
   sleep 3
