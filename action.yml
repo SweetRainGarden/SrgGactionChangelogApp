@@ -198,11 +198,11 @@ runs:
           echo "Jira ticket list is not empty."
           cat "./${{ env.SRG_OUTPUT_TICKETS_FILE }}"
         else
-          echo "## Please make sure your pull request contains at least one Jira ticket id in any those places:" >>$GITHUB_STEP_SUMMARY
+          echo "## Warning⚠️, please make sure your pull request contains at least one Jira ticket id in any those places:" >>$GITHUB_STEP_SUMMARY
           echo "- commit message" >>$GITHUB_STEP_SUMMARY
           echo "- pull request title, or pull reuqest body" >>$GITHUB_STEP_SUMMARY
           echo "- branch name." >>$GITHUB_STEP_SUMMARY
-          echo "## 请确保当前 pull request 关联（至少）一个 Jira ticket id， 以下任何地方都可以:" >>$GITHUB_STEP_SUMMARY
+          echo "## 警告⚠️，请确保当前 pull request 关联（至少）一个 Jira ticket id， 以下任何地方都可以:" >>$GITHUB_STEP_SUMMARY
           echo "- 提交信息 （commit message）" >>$GITHUB_STEP_SUMMARY
           echo "- pull request 标题栏, 或者 pull reuqest 内题栏" >>$GITHUB_STEP_SUMMARY
           echo "- 分支名称，（branch name）" >>$GITHUB_STEP_SUMMARY
