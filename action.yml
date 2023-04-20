@@ -296,7 +296,7 @@ runs:
         commits_list=$(txt_to_one_line_format_string.sh "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}")
         echo "SRG_ACTION_COMMIT_LIST=${commits_list}" >> $GITHUB_ENV
 
-        echo "## ✅ Valid changelong:" >> $GITHUB_STEP_SUMMARY
+        echo "## ✅ Valid changelog: " >> $GITHUB_STEP_SUMMARY
         echo "- ticket list: $ticket_list" >> $GITHUB_STEP_SUMMARY
         echo "- commit list: $commits_list" >> $GITHUB_STEP_SUMMARY
 
