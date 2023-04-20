@@ -257,7 +257,6 @@ runs:
           echo "## ⚠️ 请遵守 Wyze git commit messge 规范" >> $GITHUB_STEP_SUMMARY
           echo "::error::⚠️ Please make sure your pull request follows up the Wyze commit convention"
           echo "::error::⚠️ 请遵守 Wyze git commit messge 规范"
-
         fi
         cat "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
       shell: bash
@@ -296,6 +295,11 @@ runs:
         echo "SRG_ACTION_TICKET_LIST=${ticket_list}" >> $GITHUB_ENV
         commits_list=$(txt_to_one_line_format_string.sh "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}")
         echo "SRG_ACTION_COMMIT_LIST=${commits_list}" >> $GITHUB_ENV
+
+        echo "## ✅ Valid changelong:" >> $GITHUB_STEP_SUMMARY
+        echo "- ticket list: $ticket_list" >> $GITHUB_STEP_SUMMARY
+        echo "- commit list: $commits_list" >> $GITHUB_STEP_SUMMARY
+
       shell: bash
       if: ${{ github.event_name == 'pull_request' }}
 
