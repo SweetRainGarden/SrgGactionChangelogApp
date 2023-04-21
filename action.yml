@@ -1,15 +1,3 @@
-# --------------------------------------------------------------------------------------------------
-# Input: jira_domain, gh_token, and trigger keywords
-# Process: 
-# 1, extract jira ticket from dev's branch name, commits, pull request title, and pull request body
-# 2, extract commit based git commit convention with: fix:feat:chore convention
-# 3, append and inject the jira_domain into jira ticket of the step 2 in markdown format
-# 4, check if trigger keywords are in pull request title or body. (Optional)
-# Output: jira_tickets_list and absolute path of changelog.md 
-
-# add colums to google sheet: jira_tickets, commits
-# deal with the link in google sheet script for quick acess.
-# --------------------------------------------------------------------------------------------------
 name: 'Srg auto collect changelog'
 description: 'Auto collect changelog'
 inputs:
