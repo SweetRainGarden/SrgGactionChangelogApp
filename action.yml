@@ -298,6 +298,7 @@ runs:
       if: ${{ github.event_name == 'pull_request' }}
 
     - name: "TTT -> Update Google Sheet --> 1: append data"
+      continue-on-error: true
       id: append_data_google_sheet
       uses: jroehl/gsheet.action@v1.2.0
       with:
