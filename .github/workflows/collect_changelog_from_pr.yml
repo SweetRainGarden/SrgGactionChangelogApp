@@ -13,7 +13,7 @@ on:
 
 jobs:
   generate_changelog:
-    runs-on: [ ubuntu-latest ]
+    runs-on: [ self-hosted, macOS ]
     name: "Generate changelog from PR"
     steps:
       - id: collect_jira_tickets_in_pr
