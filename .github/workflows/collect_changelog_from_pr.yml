@@ -1,3 +1,5 @@
+
+name: Collect Jira tickets
 on:
   pull_request:
     branches:
