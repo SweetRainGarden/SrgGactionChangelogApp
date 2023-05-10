@@ -16,7 +16,7 @@ jobs:
     steps:
       - id: collect_jira_tickets_in_pr
         continue-on-error: true
-        uses: SweetRainGarden/SrgGactionChangelogApp@develop
+        uses: SweetRainGarden/SrgGactionChangelogApp@release/1.0.0
         with:
           jira_domain: 'xxx.atlassian.net'
 

@@ -22,7 +22,8 @@ inputs:
     description: 'The commit message convention pattern'
   pattern_jira_tickets:
     required: false
-    default: "([a-z]{2,}-)([0-9]+)"
+    default: "([a-z]+[0-9]{1,2}-[0-9]+)"
+    # default: "([a-z]{2,}-)([0-9]+)"
     description: 'Regex for extract jira ticket'
   google_sheet_token:
     required: true
