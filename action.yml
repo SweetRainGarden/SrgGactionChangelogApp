@@ -320,7 +320,7 @@ runs:
                           "${{ github.head_ref }}",
                           "${{ github.event.pull_request.merged }}",
                           "${{ github.event.action }}",
-                          "${{ github.actor }}",.
+                          "${{ github.actor }}",
                           "${{ env.SRG_ACTION_TRIGGER_TIME_SEATTLE }}",
                           "${{ env.SRG_ACTION_TRIGGER_TIME_BEIJING }}",
                           "${{ env.SRG_ACTION_TICKET_LIST }}",
