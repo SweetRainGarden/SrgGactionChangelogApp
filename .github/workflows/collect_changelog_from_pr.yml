@@ -21,7 +21,6 @@ jobs:
         uses: SweetRainGarden/SrgGactionChangelogApp@release/1.0.0
         with:
           jira_domain: 'xxx.atlassian.net'
-
           gh_token: "${{ secrets.ORG_SECRET_CI_TOKEN }}"
           google_sheet_token: "${{ secrets.ANDROID_CI_GSHEET_PRIVATE_KEY }}"
           google_sheet_client_email: "${{ secrets.ANDROID_CI_GSHEET_CLIENT_EMAIL }}"
