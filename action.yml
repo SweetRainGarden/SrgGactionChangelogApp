@@ -320,7 +320,7 @@ runs:
     - name: "TTT -> Update Google Sheet --> 1: append data"
       continue-on-error: true
       id: append_data_google_sheet
-      uses: jroehl/gsheet.action@v1.2.0
+      uses: jroehl/gsheet.action@v2.1.0
       with:
         spreadsheetId: "${{inputs.google_sheet_id}}"
         commands: | # list of commands, specified as a valid JSON string
