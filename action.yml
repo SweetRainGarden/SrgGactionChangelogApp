@@ -102,6 +102,8 @@ runs:
         PR_NUMBER="${{ github.event.pull_request.number }}"
         REPO_NAME="${{ github.repository }}"
         API_URL="https://api.github.com/repos/$REPO_NAME/pulls/$PR_NUMBER/commits" 
+        echo "PR_NUMBER: $PR_NUMBER --> REPO_NAME: $REPO_NAME"
+
         curl -s -H "Authorization: token ${{ inputs.gh_token }}" -H "Accept: application/vnd.github+json" $API_URL > "${{ env.SRG_TEMP_FILE}}"
 
         jq_installed=$(command -v jq)
