@@ -9,7 +9,7 @@ while IFS= read -r line; do
     if [[ $line == $(tail -n1 "$txt_file") ]]; then
         one_line_format_string="${one_line_format_string}${line}"
     else
-        one_line_format_string="${one_line_format_string}${line}\n"
+        one_line_format_string="${one_line_format_string}${line},"
     fi
 done <"$txt_file"
 echo "${one_line_format_string}"
