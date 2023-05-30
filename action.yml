@@ -311,6 +311,7 @@ runs:
         echo "## ✅ Valid changelog: " >> $GITHUB_STEP_SUMMARY
         echo "- ticket list: $ticket_list" >> $GITHUB_STEP_SUMMARY
         echo "- commit list: $commits_list" >> $GITHUB_STEP_SUMMARY
+        echo "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}" >> $GITHUB_STEP_SUMMARY
 
       shell: bash
       if: ${{ github.event_name == 'pull_request' }}
