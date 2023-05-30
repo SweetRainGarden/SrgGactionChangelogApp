@@ -105,6 +105,7 @@ runs:
         echo "PR_NUMBER: $PR_NUMBER --> REPO_NAME: $REPO_NAME"
 
         curl -s -H "Authorization: token ${{ inputs.gh_token }}" -H "Accept: application/vnd.github+json" $API_URL > "${{ env.SRG_TEMP_FILE}}"
+        cat "./${{ env.SRG_TEMP_FILE}}"
 
         jq_installed=$(command -v jq)
         if [ -z "$jq_installed" ]; then
@@ -114,7 +115,6 @@ runs:
           echo "jq has installed on the machine" 
         fi
 
-        # cat "./${{ env.SRG_TEMP_FILE}}"
         echo "---------------------------------------------"
         cat "./${{ env.SRG_TEMP_FILE}}" | jq -r '.[] | "\(.commit.message)"' > "./${{ env.SRG_TEMP_COMMITS_FILE }}"
         echo "" >> "./${{ env.SRG_TEMP_COMMITS_FILE }}"
