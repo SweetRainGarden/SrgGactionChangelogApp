@@ -159,8 +159,11 @@ runs:
           echo "Extract Jira tickets succeed"
           cat "${{ env.SRG_PR_CONTENT_TXT }}" "${{ env.SRG_TEMP_COMMITS_FILE }}" | tr '[:upper:]' '[:lower:]' | grep -Eo "${{ inputs.pattern_jira_tickets }}" | grep -v -E '^(patch|feature|bugfix)-[0-9]+' | sort -u | sort -n > "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
         else
+          if [ -f "${{ env.SRG_OUTPUT_TICKETS_FILE }}" ]; then
+            rm -f "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
+          fi
           touch "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
-          echo "" > "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
+          # echo "" > "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
           echo "Extract Jira tickets failed"
         fi
         echo "cat: ${{ env.SRG_OUTPUT_TICKETS_FILE }}"
