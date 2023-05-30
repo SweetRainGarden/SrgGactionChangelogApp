@@ -162,7 +162,7 @@ runs:
         fi
         touch "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
         
-        cat "${{ env.SRG_PR_CONTENT_TXT }}" "${{ env.SRG_TEMP_COMMITS_FILE }}" >> "${temp_merge}"
+        cat "${{ env.SRG_PR_CONTENT_TXT }}" "${{ env.SRG_TEMP_COMMITS_FILE }}" > "${temp_merge}"
         echo " ---> : ${temp_merge}"
         cat "${temp_merge}"
         if cat "${temp_merge}" | tr '[:upper:]' '[:lower:]' | grep -Eo "${{ inputs.pattern_jira_tickets }}" | grep -v -E '^(patch|feature|bugfix)-[0-9]+' | sort -u | sort -n >/dev/null 2>&1; then
