@@ -108,6 +108,8 @@ runs:
         cat "./${{ env.SRG_TEMP_FILE}}"
 
         jq_installed=$(command -v jq)
+
+        echo "jq_installed: $jq_installed"
         if [ -z "$jq_installed" ]; then
           echo "jq is not installed on the machine, exit..." 
           exit 1
