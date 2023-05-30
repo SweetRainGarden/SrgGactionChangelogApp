@@ -305,7 +305,7 @@ runs:
         pwd=$(pwd)
         ticket_list=$(txt_to_one_line_format_string.sh "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}" ",")
         echo "SRG_ACTION_TICKET_LIST=${ticket_list}" >> $GITHUB_ENV
-        commits_list=$(txt_to_one_line_format_string.sh "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }} "\n")
+        commits_list=$(txt_to_one_line_format_string.sh "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}" "\n")
         echo "SRG_ACTION_COMMIT_LIST=${commits_list}" >> $GITHUB_ENV
 
         echo "## ✅ Valid changelog: " >> $GITHUB_STEP_SUMMARY
