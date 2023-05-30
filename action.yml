@@ -106,8 +106,10 @@ runs:
 
         jq_installed=$(command -v jq)
         if [ -z "$jq_installed" ]; then
-          echo "jq is not installed on the machie, exit..." 
+          echo "jq is not installed on the machine, exit..." 
           exit 1
+        else
+          echo "jq has installed on the machine" 
         fi
 
         # cat "./${{ env.SRG_TEMP_FILE}}"
