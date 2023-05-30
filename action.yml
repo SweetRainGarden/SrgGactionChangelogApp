@@ -309,8 +309,9 @@ runs:
         echo "SRG_ACTION_COMMIT_LIST=${commits_list}" >> $GITHUB_ENV
 
         echo "## ✅ Valid changelog: " >> $GITHUB_STEP_SUMMARY
-        echo "- ticket list: $ticket_list" >> $GITHUB_STEP_SUMMARY
-        echo "- commit list: $commits_list" >> $GITHUB_STEP_SUMMARY
+        echo "- ticket list: " >> $GITHUB_STEP_SUMMARY
+        cat "${pwd}/${{ env.SRG_OUTPUT_TICKETS_FILE }}" >> $GITHUB_STEP_SUMMARY
+        echo "- commit list:" >> $GITHUB_STEP_SUMMARY
         cat "${pwd}/${{ env.SRG_OUTPUT_COMMITS_FILE }}" >> $GITHUB_STEP_SUMMARY
 
       shell: bash
