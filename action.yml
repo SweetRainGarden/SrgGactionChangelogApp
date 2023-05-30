@@ -373,4 +373,5 @@ runs:
         rm -f "${{ env.SRG_TEMP_FILE }}"
         rm -f "${{ env.SRG_TEMP_COMMITS_FILE }}"
       shell: bash
+      continue-on-error: true
       if: ${{ github.event_name == 'pull_request' }}
