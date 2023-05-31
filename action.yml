@@ -43,7 +43,7 @@ inputs:
     description: 'Google sheet work sheet tittle'
   google_sheet_closed_pr_sheet_title:
     required: false
-    default: "changelog_from_closed_pr"
+    default: "log_from_closed_pr"
     description: 'Google sheet work sheet tittle'
 outputs:
   jira_ticket_list:
