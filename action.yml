@@ -291,14 +291,6 @@ runs:
       shell: bash
       if: ${{ github.event_name == 'pull_request' }}
 
-    - if: ${{ github.event_name == 'pull_request' }}
-      id: export_outputs_step
-      run: |
-        echo "WWW -> Print export_outputs_step content"
-        echo "jira_ticket_list=${{ env.SRG_ACTION_TICKET_LIST }}" >> $GITHUB_OUTPUT
-        echo "srg_changelog_file=${{ env.SRG_ACTION_COMMIT_LIST }}" >> $GITHUB_OUTPUT
-      shell: bash
-
     - name: 'TTT -> Get action trigger time'
       run: |
         # Get the current date and time in Seattle time zone
@@ -325,6 +317,14 @@ runs:
 
       shell: bash
       if: ${{ github.event_name == 'pull_request' }}
+
+    - if: ${{ github.event_name == 'pull_request' }}
+      id: export_outputs_step
+      run: |
+        echo "WWW -> Print export_outputs_step content"
+        echo "jira_ticket_list=${{ env.SRG_ACTION_TICKET_LIST }}" >> $GITHUB_OUTPUT
+        echo "srg_changelog_file=${{ env.SRG_ACTION_COMMIT_LIST }}" >> $GITHUB_OUTPUT
+      shell: bash
 
     - name: "TTT -> Update Google Sheet --> 1: append data"
       continue-on-error: true
