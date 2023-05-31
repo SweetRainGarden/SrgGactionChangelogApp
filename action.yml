@@ -39,6 +39,11 @@ inputs:
     description: 'Google sheet client email'
   google_sheet_work_sheet_title:
     required: true
+    default: "changelog_from_pr"
+    description: 'Google sheet work sheet tittle'
+  google_sheet_closed_pr_sheet_title:
+    required: false
+    default: "changelog_from_closed_pr"
     description: 'Google sheet work sheet tittle'
 outputs:
   jira_ticket_list:
@@ -339,7 +344,7 @@ runs:
         echo "srg_changelog_file=${{ env.SRG_ACTION_COMMIT_LIST }}" >> $GITHUB_OUTPUT
       shell: bash
 
-    - name: "TTT -> Update Google Sheet --> 1: append data"
+    - name: "TTT -> Update Google Sheet --> 1: append merged pr data"
       continue-on-error: true
       id: append_data_google_sheet
       uses: jroehl/gsheet.action@v2.1.0
@@ -352,6 +357,46 @@ runs:
               "args":
                 {
                   "worksheetTitle": "${{ inputs.google_sheet_work_sheet_title }}",
+                  "data":
+                    [
+                      [
+                          "${{ github.event.repository.name }}",
+                          "=HYPERLINK(${{ env.DOUBLE_QUOTE }}${{ github.event.pull_request.html_url }}${{ env.DOUBLE_QUOTE }},${{ env.DOUBLE_QUOTE }}${{ github.event.number }}${{ env.DOUBLE_QUOTE }})",
+                          "${{ github.base_ref }}",
+                          "${{ github.head_ref }}",
+                          "${{ github.event.pull_request.merged }}",
+                          "${{ github.event.action }}",
+                          "${{ github.actor }}",
+                          "${{ env.SRG_ACTION_TRIGGER_TIME_SEATTLE }}",
+                          "${{ env.SRG_ACTION_TRIGGER_TIME_BEIJING }}",
+                          "${{ env.SRG_ACTION_TICKET_LIST }}",
+                          "${{ env.SRG_ACTION_COMMIT_LIST }}"
+                      ]
+                    ],
+                  "minCol": 1,
+                  "valueInputOption":"USER_ENTERED"
+                }
+            }
+          ]
+      env:
+        DOUBLE_QUOTE: '\"'
+        GSHEET_CLIENT_EMAIL: ${{ inputs.google_sheet_client_email }}
+        GSHEET_PRIVATE_KEY: ${{ inputs.google_sheet_token }}
+
+    - name: "TTT -> Update Google Sheet --> 2: append closed pr data"
+      continue-on-error: true
+      id: append_closed_pr_data_google_sheet
+      uses: jroehl/gsheet.action@v2.1.0
+      if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == false }}
+      with:
+        spreadsheetId: "${{inputs.google_sheet_id}}"
+        commands: | # list of commands, specified as a valid JSON string
+          [
+            {
+              "command": "appendData",
+              "args":
+                {
+                  "worksheetTitle": "${{ inputs.google_sheet_closed_pr_sheet_title }}",
                   "data":
                     [
                       [
