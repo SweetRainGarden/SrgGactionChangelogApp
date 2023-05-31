@@ -85,6 +85,7 @@ runs:
         echo "SRG_PR_CONTENT_TXT=srg_temp_pr_and_branch_info.txt" >> $GITHUB_ENV
         echo "SRG_TEMP_FILE=srg_temp.txt" >> $GITHUB_ENV
         echo "SRG_TEMP_COMMITS_FILE=srg_temp_commits.txt" >> $GITHUB_ENV
+        
         echo "SRG_OUTPUT_TICKETS_FILE=srg_output_tickets.txt" >> $GITHUB_ENV
         echo "SRG_OUTPUT_COMMITS_FILE=srg_output_commits.txt" >> $GITHUB_ENV
       shell: bash
@@ -94,6 +95,15 @@ runs:
         echo ""
         repo_org_name=$(get_repo_company_name.sh "SrgGactionChangelogApp")
         echo "repo_org_name --> $repo_org_name"
+
+        if [ -f "${{ env.SRG_OUTPUT_TICKETS_FILE }}" ]; then
+          rm -f "${{ env.SRG_OUTPUT_TICKETS_FILE }}"
+        fi
+
+        if [ -f "${{ env.SRG_OUTPUT_COMMITS_FILE }}" ]; then
+          rm -f "${{ env.SRG_OUTPUT_COMMITS_FILE }}"
+        fi
+
       shell: bash
 
     - run: |
@@ -378,9 +388,19 @@ runs:
         echo "ZZZ -> Clean up --> 0: txt files"
         echo ""
         echo "------------- pull_request closed and merged ------------"
-        rm -f "${{ env.SRG_PR_CONTENT_TXT }}"
-        rm -f "${{ env.SRG_TEMP_FILE }}"
-        rm -f "${{ env.SRG_TEMP_COMMITS_FILE }}"
+
+        if [ -f "${{ env.SRG_PR_CONTENT_TXT }}" ]; then
+          rm -f "${{ env.SRG_PR_CONTENT_TXT }}"
+        fi
+
+        if [ -f "${{ env.SRG_TEMP_FILE }}" ]; then
+          rm -f "${{ env.SRG_TEMP_FILE }}"
+        fi
+
+        if [ -f "${{ env.SRG_TEMP_COMMITS_FILE }}" ]; then
+          rm -f "${{ env.SRG_TEMP_COMMITS_FILE }}"
+        fi
+
       shell: bash
       continue-on-error: true
       if: ${{ github.event_name == 'pull_request' }}
