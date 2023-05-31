@@ -135,7 +135,6 @@ runs:
         write-mode: overwrite
 
     - if: ${{ github.event_name == 'pull_request' }}
-      id: export_outputs_step
       run: |
         echo "WWW -> Print original content"
         # add a end line for SRG_PR_CONTENT_TXT
@@ -150,6 +149,9 @@ runs:
         echo "------------------ cat ${{ env.SRG_PR_CONTENT_TXT }} --------------------"
         cat "${{ env.SRG_PR_CONTENT_TXT }}"
         echo "----------------------------------------------------------------------------"
+
+        echo "jira_ticket_list=${mock_artifact_download_link}" >> $GITHUB_OUTPUT
+        echo "srg_changelog_file=${mock_artifact_download_link}" >> $GITHUB_OUTPUT
 
       shell: bash
 
@@ -289,6 +291,13 @@ runs:
       shell: bash
       if: ${{ github.event_name == 'pull_request' }}
 
+    - if: ${{ github.event_name == 'pull_request' }}
+      id: export_outputs_step
+      run: |
+        echo "WWW -> Print export_outputs_step content"
+        echo "jira_ticket_list=${{ env.SRG_ACTION_TICKET_LIST }}" >> $GITHUB_OUTPUT
+        echo "srg_changelog_file=${{ env.SRG_ACTION_COMMIT_LIST }}" >> $GITHUB_OUTPUT
+      shell: bash
 
     - name: 'TTT -> Get action trigger time'
       run: |
