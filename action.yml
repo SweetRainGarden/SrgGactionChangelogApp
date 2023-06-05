@@ -348,7 +348,7 @@ runs:
       continue-on-error: true
       id: append_data_google_sheet
       if: ${{ github.event_name != 'pull_request' || github.event.action != 'closed' || github.event.pull_request.merged != false }}
-      uses: jroehl/gsheet.action@v2.1.0
+      uses: jroehl/gsheet.action@v2.1.1
       with:
         spreadsheetId: "${{inputs.google_sheet_id}}"
         commands: | # list of commands, specified as a valid JSON string
@@ -387,7 +387,7 @@ runs:
     - name: "TTT -> Update Google Sheet --> 2: append closed pr data"
       continue-on-error: true
       id: append_closed_pr_data_google_sheet
-      uses: jroehl/gsheet.action@v2.1.0
+      uses: jroehl/gsheet.action@v2.1.1
       if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == false }}
       with:
         spreadsheetId: "${{inputs.google_sheet_id}}"
