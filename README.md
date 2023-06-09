@@ -13,12 +13,9 @@
 - `google_sheet_id`: (Required) Google sheet id
 - `google_sheet_client_email`: (Required) Google sheet client email
 - `google_sheet_work_sheet_title`: (Required) Google sheet work sheet title
-
 **Outputs:**
 - `jira_ticket_list`: The Jira tickets list from pull request and commit message
 - `srg_changelog_file`: The file that contains changelog of the current pull request
-
-  
  ## Commit message convention:
  - feat
  - fix
