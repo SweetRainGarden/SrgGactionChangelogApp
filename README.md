@@ -26,7 +26,6 @@
  - new_api
  - break_api
  - deprecate_api
- 
  ## Learn by diff:
 - [ fix if statement for github.event.pull_request.merged](https://github.com/SweetRainGarden/SrgGactionChangelogApp/pull/95/files)
 - [ add regex to match wma1-123 format. it was only match wma-123](https://github.com/SweetRainGarden/SrgGactionChangelogApp/pull/247/files)
